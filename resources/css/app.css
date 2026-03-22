@@ -1,0 +1,406 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 text-gray-900 antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  ::selection {
+    @apply bg-accent-200 text-accent-900;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-r from-accent-600 to-accent-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:from-accent-500 hover:to-accent-600 hover:shadow-lg hover:shadow-accent-500/25 active:scale-[0.98];
+  }
+  
+  .btn-secondary {
+    @apply bg-gradient-to-r from-amber-500 to-amber-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:from-amber-400 hover:to-amber-500 hover:shadow-lg hover:shadow-amber-500/25 active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-gray-600 px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-gray-100 hover:text-gray-900 active:scale-[0.98];
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-white/80 backdrop-blur-sm focus:ring-2 focus:ring-accent-500/20 focus:border-accent-500 transition-all duration-200 placeholder:text-gray-400;
+  }
+  
+  /* ============================================
+     GLASSMORPHIC BASE UTILITIES
+     ============================================ */
+  .glass {
+    @apply bg-white/10 backdrop-blur-lg border border-white/20 shadow-glass;
+  }
+  
+  .glass-light {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-sm;
+  }
+  
+  .glass-medium {
+    @apply bg-white/20 backdrop-blur-xl border border-white/30 shadow-glass;
+  }
+  
+  .glass-dark {
+    @apply bg-white/30 backdrop-blur-xl border border-white/40 shadow-glass-lg;
+  }
+  
+  .glass-card {
+    @apply bg-white/20 backdrop-blur-xl border border-white/30 shadow-glass rounded-2xl;
+  }
+  
+  .glass-card-hover {
+    @apply glass-card transition-all duration-300 hover:bg-white/30 hover:shadow-glass-lg hover:-translate-y-0.5;
+  }
+  
+  .glass-surface {
+    @apply bg-white/15 backdrop-blur-lg border border-white/20 rounded-xl shadow-inner-glow;
+  }
+  
+  /* Glass Gradient Backgrounds */
+  .glass-gradient {
+    @apply bg-gradient-glass backdrop-blur-xl border border-white/20 shadow-glass;
+  }
+  
+  /* Glass with Accent Tint */
+  .glass-accent {
+    @apply bg-accent-500/10 backdrop-blur-lg border border-accent-500/20 shadow-glass;
+  }
+  
+  /* ============================================
+     GLASSMORPHIC SIDEBAR STYLES
+     ============================================ */
+  .sidebar-glass {
+    @apply bg-gradient-to-b from-accent-600/95 to-accent-800/95 backdrop-blur-xl border-r border-white/10;
+    box-shadow: 4px 0 32px rgba(124, 58, 237, 0.2);
+  }
+
+  .sidebar-item {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 hover:text-white transition-all duration-300 ease-out;
+  }
+
+  .sidebar-item:hover {
+    @apply scale-[1.02];
+    box-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
+  }
+
+  .sidebar-item.active {
+    @apply bg-gradient-to-r from-accent-400/30 to-transparent text-white;
+    box-shadow: 0 0 24px rgba(167, 139, 250, 0.4);
+    border-left: 3px solid #a78bfa;
+  }
+
+  .sidebar-item.active .sidebar-icon-bg {
+    @apply bg-accent-400/30;
+  }
+
+  .sidebar-icon-bg {
+    @apply flex items-center justify-center w-9 h-9 rounded-lg bg-white/5 transition-all duration-300;
+  }
+
+  .sidebar-item.active .sidebar-icon-bg {
+    @apply bg-accent-400/30;
+  }
+
+  .sidebar-item-collapsed {
+    @apply justify-center px-2;
+  }
+
+  .sidebar-item-collapsed span {
+    @apply hidden;
+  }
+
+  .sidebar-user-card {
+    @apply flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 transition-all duration-300;
+  }
+
+  .sidebar-user-card:hover {
+    @apply bg-white/10 scale-[1.02];
+  }
+
+  .sidebar-collapse-btn {
+    @apply flex items-center justify-center w-8 h-8 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-all duration-300;
+  }
+
+  .sidebar-collapse-btn:hover {
+    @apply scale-110;
+  }
+
+  /* Sidebar Section Dividers */
+  .sidebar-section {
+    @apply pt-4 pb-2;
+  }
+
+  .sidebar-section-title {
+    @apply px-4 py-2 text-xs font-semibold text-white/40 uppercase tracking-wider;
+  }
+
+  /* ============================================
+     GLASSMORPHIC TABLE STYLES
+     ============================================ */
+  .glass-table {
+    @apply w-full text-sm;
+  }
+
+  .glass-table thead {
+    @apply bg-glass-medium;
+  }
+
+  .glass-table thead th {
+    @apply px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider;
+  }
+
+  .glass-table tbody tr {
+    @apply border-b border-white/10 transition-colors duration-200;
+  }
+
+  .glass-table tbody tr:hover {
+    @apply bg-white/10;
+  }
+
+  .glass-table tbody td {
+    @apply px-4 py-3 text-gray-700;
+  }
+
+  /* ============================================
+     GLASSMORPHIC MODAL/DIALOG STYLES
+     ============================================ */
+  .glass-modal {
+    @apply fixed inset-0 z-50 flex items-center justify-center p-4;
+  }
+
+  .glass-modal-overlay {
+    @apply fixed inset-0 bg-black/40 backdrop-blur-sm;
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  .glass-modal-content {
+    @apply relative bg-white/80 backdrop-blur-xl border border-white/30 shadow-glass-lg rounded-2xl;
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  /* ============================================
+     GLASSMORPHIC FORM STYLES
+     ============================================ */
+  .glass-input {
+    @apply w-full px-4 py-2.5 rounded-xl border border-white/30 bg-white/20 backdrop-blur-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-accent-500/40 focus:border-accent-500/50 transition-all duration-200;
+  }
+
+  .glass-select {
+    @apply glass-input appearance-none cursor-pointer;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+  }
+
+  .glass-checkbox {
+    @apply w-5 h-5 rounded-md border-2 border-white/40 bg-white/20 backdrop-blur-sm cursor-pointer transition-all duration-200 checked:bg-gradient-to-r checked:from-accent-500 checked:to-accent-600 checked:border-transparent;
+  }
+
+  /* ============================================
+     GLASSMORPHIC BADGE/PILL STYLES
+     ============================================ */
+  .glass-badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium backdrop-blur-md transition-all duration-200;
+  }
+
+  .glass-badge-success {
+    @apply bg-emerald-500/20 border border-emerald-500/30 text-emerald-700;
+  }
+
+  .glass-badge-warning {
+    @apply bg-amber-500/20 border border-amber-500/30 text-amber-700;
+  }
+
+  .glass-badge-error {
+    @apply bg-red-500/20 border border-red-500/30 text-red-700;
+  }
+
+  .glass-badge-info {
+    @apply bg-blue-500/20 border border-blue-500/30 text-blue-700;
+  }
+
+  .glass-badge-purple {
+    @apply bg-accent-500/20 border border-accent-500/30 text-accent-700;
+  }
+
+  /* ============================================
+     GLASSMORPHIC NAVIGATION
+     ============================================ */
+  .glass-nav {
+    @apply fixed top-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-xl border-b border-white/20;
+  }
+
+  /* ============================================
+     MOBILE MENU OVERLAY STYLES
+     ============================================ */
+  .mobile-menu-overlay {
+    @apply fixed inset-0 bg-black/60 backdrop-blur-sm z-40;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .mobile-menu-panel {
+    @apply fixed top-0 right-0 h-full w-72;
+    background: linear-gradient(180deg, rgba(124, 58, 237, 0.95) 0%, rgba(91, 33, 182, 0.98) 100%);
+    backdrop-filter: blur(20px);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 50;
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.3);
+    animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mobile-menu-item {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10 hover:text-white transition-all duration-300;
+  }
+
+  .mobile-menu-item:hover {
+    @apply scale-[1.02] translate-x-2;
+    box-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
+  }
+
+  .mobile-menu-item.active {
+    @apply bg-gradient-to-r from-accent-400/40 to-transparent text-white border-l-4 border-accent-400;
+  }
+
+  .mobile-menu-item-stagger {
+    animation: slideInLeft 0.4s ease-out backwards;
+  }
+
+  .mobile-menu-item-stagger:nth-child(1) { animation-delay: 0.05s; }
+  .mobile-menu-item-stagger:nth-child(2) { animation-delay: 0.1s; }
+  .mobile-menu-item-stagger:nth-child(3) { animation-delay: 0.15s; }
+  .mobile-menu-item-stagger:nth-child(4) { animation-delay: 0.2s; }
+  .mobile-menu-item-stagger:nth-child(5) { animation-delay: 0.25s; }
+
+  .mobile-menu-close {
+    @apply flex items-center justify-center w-10 h-10 rounded-xl text-white/70 hover:text-white hover:bg-white/10 transition-all duration-300;
+  }
+
+  .mobile-menu-close:hover {
+    @apply scale-110 rotate-90;
+  }
+
+  .mobile-menu-divider {
+    @apply border-t border-white/10 my-4;
+  }
+
+  /* ============================================
+     MOBILE BOTTOM NAVIGATION STYLES
+     ============================================ */
+  .bottom-nav-glass {
+    @apply bg-white/95 backdrop-blur-xl border-t border-white/20;
+    box-shadow: 0 -4px 32px rgba(124, 58, 237, 0.12);
+  }
+
+  .bottom-nav-item {
+    @apply flex flex-col items-center justify-center p-2 text-gray-400 hover:text-accent-600 transition-all duration-300 relative;
+  }
+
+  .bottom-nav-item:hover {
+    @apply scale-105;
+  }
+
+  .bottom-nav-item.active {
+    @apply text-accent-600;
+  }
+
+  .bottom-nav-icon-wrapper {
+    @apply relative flex items-center justify-center w-12 h-8 transition-all duration-300;
+  }
+
+  .bottom-nav-item.active .bottom-nav-icon-wrapper {
+    @apply scale-110;
+  }
+
+  .bottom-nav-pill {
+    @apply absolute -top-3 left-1/2 -translate-x-1/2 w-14 h-6 bg-gradient-to-r from-accent-400 to-accent-600 rounded-full opacity-0 transition-all duration-300;
+  }
+
+  .bottom-nav-item.active .bottom-nav-pill {
+    @apply opacity-100;
+    box-shadow: 0 4px 16px rgba(167, 139, 250, 0.5);
+  }
+
+  .bottom-nav-label {
+    @apply text-[10px] font-medium mt-0.5 transition-all duration-300;
+  }
+
+  .bottom-nav-item.active .bottom-nav-label {
+    @apply text-accent-600 font-semibold;
+  }
+
+  .bottom-nav-item:active .bottom-nav-icon-wrapper {
+    animation: bounceTap 0.2s ease-out;
+  }
+
+  /* Floating Action Button Container */
+  .fab-container {
+    @apply fixed bottom-20 right-4 md:bottom-24 md:right-6 z-50;
+  }
+
+  .fab-button {
+    @apply w-14 h-14 rounded-full bg-gradient-to-r from-accent-500 to-accent-600 text-white shadow-glass-glow flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-glass-lg active:scale-95;
+  }
+
+  .fab-button:hover {
+    box-shadow: 0 8px 32px rgba(124, 58, 237, 0.4);
+  }
+
+  /* ============================================
+     UTILITIES
+     ============================================ */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Text Gradient */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-500 to-accent-700;
+  }
+
+  /* Glass Effect for Focus States */
+  .focus-glass {
+    @apply focus:outline-none focus:ring-2 focus:ring-accent-500/40 focus:border-accent-500/50 focus:bg-white/30;
+  }
+
+  /* Status Color Utilities */
+  .status-estimate { @apply bg-gray-100 text-gray-700; }
+  .status-invoice { @apply bg-blue-100 text-blue-700; }
+  .status-payment { @apply bg-green-100 text-green-700; }
+  .status-production { @apply bg-amber-100 text-amber-700; }
+  .status-delivered { @apply bg-purple-100 text-purple-700; }
+  .status-completed { @apply bg-emerald-100 text-emerald-700; }
+}

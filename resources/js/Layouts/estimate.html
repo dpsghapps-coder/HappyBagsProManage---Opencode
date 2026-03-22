@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Estimate - Happy Bags</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#000000",
+                        "secondary": "#5a5f66",
+                        "surface-container": "#eeedf0",
+                        "background": "#faf9fc",
+                        "accent-blue": "#0052FF"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope", "sans-serif"],
+                        "body": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.5rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-print-color-adjust: exact;
+        }
+
+        h1,
+        h2,
+        h3,
+        .font-headline {
+            font-family: 'Manrope', sans-serif;
+        }
+
+        /* Print Specific Logic */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background-color: white !important;
+            }
+
+            main {
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+            }
+
+            section {
+                border: none !important;
+                box-shadow: none !important;
+            }
+
+            .estimate-container {
+                border: 1px solid #eee !important;
+            }
+        }
+
+        /* Custom scrollbar for mobile tables */
+        .table-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .table-scroll::-webkit-scrollbar-thumb {
+            background: #e2e2e5;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-slate-900 selection:bg-black selection:text-white">
+
+    <main class="pt-12 pb-12 px-4 md:px-20 max-w-7xl mx-auto min-h-screen">
+
+        <!-- Estimate Canvas -->
+        <section
+            class="estimate-container bg-white shadow-xl md:rounded-xl overflow-hidden flex flex-col border border-slate-200">
+
+            <!-- Signature Document Header -->
+            <div class="flex flex-col md:flex-row">
+                <div class="flex-grow p-6 md:p-10 space-y-6">
+                    <div class="space-y-3">
+                        <h1 class="text-4xl font-black tracking-tighter text-primary font-headline italic leading-none">
+                            Happy Bags.</h1>
+                        <p class="text-secondary text-[13px] leading-relaxed max-w-xs font-medium">
+                            2443 Editorial Way, Suite 100<br />
+                            Creative District, NY 10012<br />
+                            <span class="text-black font-bold">hello@happybags.com</span>
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-6 border-t border-slate-100">
+                        <div>
+                            <div class="text-[10px] font-bold uppercase tracking-[0.2em] text-secondary mb-2">Estimate
+                                To</div>
+                            <h3 class="text-lg font-bold text-on-surface font-headline">Arcturus Media Group</h3>
+                            <p class="text-secondary text-[13px] font-medium leading-relaxed">
+                                Attn: Sarah Jenkins<br />
+                                980 Market Street, San Francisco, CA 94103
+                            </p>
+                        </div>
+                        <div class="flex flex-row sm:flex-col justify-between sm:justify-start gap-4">
+                            <div>
+                                <div class="text-[10px] font-bold uppercase tracking-[0.2em] text-secondary">Estimate
+                                    Number</div>
+                                <div class="text-on-surface font-bold text-[13px]">EST-2024-089</div>
+                            </div>
+                            <div>
+                                <div class="text-[10px] font-bold uppercase tracking-[0.2em] text-secondary">Date Issued
+                                </div>
+                                <div class="text-on-surface font-bold text-[13px]">October 24, 2024</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dark Brand Header Accent -->
+                <div class="bg-primary w-full md:w-72 p-10 flex flex-col justify-between text-white">
+                    <div class="space-y-1">
+                        <div class="text-[10px] font-medium text-white/40 tracking-[0.25em] uppercase">Document</div>
+                        <div class="text-4xl font-black tracking-tighter font-headline leading-tight">ESTIMATE</div>
+                    </div>
+                    <div class="pt-12 border-t border-white/10">
+                        <div class="text-[10px] font-medium text-white/40 mb-1 uppercase tracking-widest">Total
+                            Estimated</div>
+                        <div class="text-3xl font-extrabold tracking-tight font-headline">GHC 4,250.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Itemized Table Section -->
+            <div class="px-6 md:px-10 py-4">
+                <div class="table-scroll overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[700px]">
+                        <thead>
+                            <tr class="bg-slate-50 border-y border-slate-100">
+                                <th
+                                    class="py-3 px-4 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500 rounded-tl-lg">
+                                    No.</th>
+                                <th class="py-3 px-4 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500">
+                                    Description</th>
+                                <th
+                                    class="py-3 px-4 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500 text-center">
+                                    Qty</th>
+                                <th
+                                    class="py-3 px-4 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500 text-right">
+                                    Unit Price</th>
+                                <th
+                                    class="py-3 px-4 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500 text-right rounded-tr-lg">
+                                    Total</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="group hover:bg-slate-50/50 transition-colors border-b border-slate-50">
+                                <td class="py-4 px-4 text-secondary font-mono text-xs">01</td>
+                                <td class="py-4 px-4">
+                                    <div class="text-slate-900 font-bold text-[15px]">Custom Tote Design - Autumn
+                                        Collection</div>
+                                    <div class="text-slate-500 text-xs mt-0.5 leading-relaxed font-medium">Full
+                                        editorial design and layout for 5 variations</div>
+                                </td>
+                                <td class="py-4 px-4 text-center font-bold">5</td>
+                                <td class="py-4 px-4 text-right tabular-nums">GHC 450.00</td>
+                                <td class="py-4 px-4 text-right font-black tabular-nums text-slate-900">GHC 2,250.00
+                                </td>
+                            </tr>
+                            <tr class="group hover:bg-slate-50/50 transition-colors border-b border-slate-50">
+                                <td class="py-4 px-4 text-secondary font-mono text-xs">02</td>
+                                <td class="py-4 px-4">
+                                    <div class="text-slate-900 font-bold text-[15px]">Premium Fabric Sourcing</div>
+                                    <div class="text-slate-500 text-xs mt-0.5 leading-relaxed font-medium">Ethical
+                                        canvas and organic cotton selection</div>
+                                </td>
+                                <td class="py-4 px-4 text-center font-bold">1</td>
+                                <td class="py-4 px-4 text-right tabular-nums">GHC 1,200.00</td>
+                                <td class="py-4 px-4 text-right font-black tabular-nums text-slate-900">GHC 1,200.00
+                                </td>
+                            </tr>
+                            <tr class="group hover:bg-slate-50/50 transition-colors border-b border-slate-50">
+                                <td class="py-4 px-4 text-secondary font-mono text-xs">03</td>
+                                <td class="py-4 px-4">
+                                    <div class="text-slate-900 font-bold text-[15px]">Branding Consultation</div>
+                                    <div class="text-slate-500 text-xs mt-0.5 leading-relaxed font-medium">4-hour
+                                        strategic session for brand placement</div>
+                                </td>
+                                <td class="py-4 px-4 text-center font-bold">4</td>
+                                <td class="py-4 px-4 text-right tabular-nums">GHC 200.00</td>
+                                <td class="py-4 px-4 text-right font-black tabular-nums text-slate-900">GHC 800.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Footer Summary & Terms -->
+            <div class="p-6 md:p-10 bg-slate-50 mt-auto border-t border-slate-200">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div>
+                            <div class="text-[10px] font-bold uppercase tracking-[0.2em] text-secondary mb-2">Notes &
+                                Terms</div>
+                            <p
+                                class="text-[11px] text-slate-500 leading-relaxed font-medium bg-white p-3 border border-slate-200 rounded-lg">
+                                This estimate is valid for 30 days. 50% deposit required. Timeline: 4-6 weeks
+                                post-approval.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs font-medium px-4">
+                            <span class="text-slate-500">Subtotal</span>
+                            <span class="text-slate-900 font-bold">GHC 4,250.00</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs font-medium px-4">
+                            <span class="text-slate-500">Tax (0%)</span>
+                            <span class="text-slate-900 font-bold">GHC 0.00</span>
+                        </div>
+                        <div
+                            class="flex justify-between items-center bg-black text-white px-6 py-4 rounded-lg shadow-lg mt-2">
+                            <span class="font-headline font-bold text-[11px] uppercase tracking-[0.2em]">Total</span>
+                            <span class="font-headline font-extrabold text-2xl">GHC 4,250.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Asymmetric Detail Blocks (Hidden on Print) -->
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 no-print">
+            <div class="bg-white p-6 rounded-xl space-y-2 border border-slate-200 hover:shadow-md transition-shadow">
+                <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center">
+                    <span class="material-symbols-outlined text-black text-sm">verified_user</span>
+                </div>
+                <h4 class="font-headline font-bold text-slate-900 text-sm">Quality Guarantee</h4>
+                <p class="text-[11px] text-slate-500 leading-relaxed font-medium">Hand-inspected editorial standards in
+                    every single stitch.</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl space-y-2 border border-slate-200 hover:shadow-md transition-shadow">
+                <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center">
+                    <span class="material-symbols-outlined text-black text-sm">local_shipping</span>
+                </div>
+                <h4 class="font-headline font-bold text-slate-900 text-sm">Global Delivery</h4>
+                <p class="text-[11px] text-slate-500 leading-relaxed font-medium">Secure, insured shipping to over 45
+                    countries worldwide.</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl space-y-2 border border-slate-200 hover:shadow-md transition-shadow">
+                <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center">
+                    <span class="material-symbols-outlined text-black text-sm">eco</span>
+                </div>
+                <h4 class="font-headline font-bold text-slate-900 text-sm">Eco-Conscious</h4>
+                <p class="text-[11px] text-slate-500 leading-relaxed font-medium">Sustainable fabric sourcing and 100%
+                    recycled packaging.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="no-print bg-white py-8 px-6 md:px-20 border-t border-slate-200">
+        <div class="flex flex-col md:flex-row justify-between items-center w-full max-w-7xl mx-auto gap-4">
+            <div class="text-slate-400 font-medium text-[9px] uppercase tracking-[0.2em]">
+                © 2024 Happy Bags. Crafted for Editorial Excellence.
+            </div>
+            <div class="flex gap-6">
+                <a class="text-slate-400 font-medium text-[9px] uppercase tracking-[0.2em] hover:text-black transition-all underline decoration-slate-200 underline-offset-4"
+                    href="#">Terms</a>
+                <a class="text-slate-400 font-medium text-[9px] uppercase tracking-[0.2em] hover:text-black transition-all underline decoration-slate-200 underline-offset-4"
+                    href="#">Privacy</a>
+                <a class="text-slate-400 font-medium text-[9px] uppercase tracking-[0.2em] hover:text-black transition-all underline decoration-slate-200 underline-offset-4"
+                    href="#">Support</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
