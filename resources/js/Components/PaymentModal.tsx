@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import { X, DollarSign, Plus, Trash2, User, CheckCircle } from 'lucide-react';
+import { X, Plus, Trash2, User, CheckCircle } from 'lucide-react';
+import GhanaCedi from '@/Components/GhanaCedi';
 
 interface Payment {
     id: number;
@@ -55,7 +56,8 @@ export default function PaymentModal({ order, isOpen, onClose, onPaymentAdded }:
     const [isFullyPaid, setIsFullyPaid] = useState(false);
     const [addingPayment, setAddingPayment] = useState(false);
     const [paymentAmount, setPaymentAmount] = useState('');
-    const [selectedPaymentType, setSelectedPaymentType] = useState('Hubtel');
+    const [selectedPaymentType, setSelectedPaymentType] = useState('Cash');
+    const paymentTypes = ['Cash', 'Mobile Money', 'Bank Transfer', 'Cheque', 'Hubtel', 'Apps & Mobile'];
 
     useEffect(() => {
         if (isOpen) {
@@ -187,7 +189,7 @@ export default function PaymentModal({ order, isOpen, onClose, onPaymentAdded }:
                     <div className="flex items-center justify-between p-4 sm:p-6 border-b border-white/20">
                         <div className="flex items-center gap-3 min-w-0">
                             <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                                <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" />
+                                <GhanaCedi className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" />
                             </div>
                             <div className="min-w-0">
                                 <h2 className="text-lg sm:text-xl font-semibold text-gray-800 truncate">{order.order_id}</h2>
@@ -254,19 +256,28 @@ export default function PaymentModal({ order, isOpen, onClose, onPaymentAdded }:
                                     <Plus className="w-3 h-3 sm:w-4 sm:h-4 text-accent-600" />
                                     Add Payment
                                 </h3>
-                                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                                    <div className="flex-1">
+                                <div className="flex flex-col gap-2 sm:gap-3">
+                                    <div className="w-full">
                                         <input
                                             type="number"
                                             value={paymentAmount}
                                             onChange={(e) => setPaymentAmount(e.target.value)}
                                             placeholder={`Max: GHC ${formatPrice(totalDue)}`}
-                                            className="glass-input text-sm"
+                                            className="glass-input text-sm w-full"
                                             min="0.01"
                                             max={totalDue}
                                             step="0.01"
                                         />
                                     </div>
+                                    <select
+                                        value={selectedPaymentType}
+                                        onChange={(e) => setSelectedPaymentType(e.target.value)}
+                                        className="glass-input text-sm w-full"
+                                    >
+                                        {paymentTypes.map(type => (
+                                            <option key={type} value={type}>{type}</option>
+                                        ))}
+                                    </select>
                                     <button
                                         onClick={handleAddPayment}
                                         disabled={addingPayment || !paymentAmount}
@@ -275,7 +286,7 @@ export default function PaymentModal({ order, isOpen, onClose, onPaymentAdded }:
                                         {addingPayment ? (
                                             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                                         ) : (
-                                            <DollarSign className="w-4 h-4" />
+                                            <GhanaCedi className="w-4 h-4" />
                                         )}
                                         <span className="sm:hidden">Pay</span>
                                         <span className="hidden sm:inline">Pay Now</span>
@@ -292,7 +303,7 @@ export default function PaymentModal({ order, isOpen, onClose, onPaymentAdded }:
                         ) : payments.length === 0 ? (
                             <div className="text-center py-8">
                                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                                    <DollarSign className="w-8 h-8 text-gray-300" />
+                                    <GhanaCedi className="w-8 h-8 text-gray-300" />
                                 </div>
                                 <p className="text-gray-500">No payments recorded yet.</p>
                             </div>
@@ -305,7 +316,7 @@ export default function PaymentModal({ order, isOpen, onClose, onPaymentAdded }:
                                     >
                                         <div className="flex items-center gap-3">
                                             <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
-                                                <DollarSign className="w-5 h-5 text-emerald-600" />
+                                                <GhanaCedi className="w-5 h-5 text-emerald-600" />
                                             </div>
                                             <div>
                                                 <p className="font-semibold text-gray-800">

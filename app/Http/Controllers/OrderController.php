@@ -20,9 +20,19 @@ class OrderController extends Controller
             abort(401, 'Unauthorized');
         }
 
-        $allowedRoles = ['manager', 'sales_rep'];
+        $allowedRoles = ['manager', 'sales_rep', 'client'];
         
         if ($action === 'delete') {
+            $allowedRoles = ['manager'];
+            if (!in_array($user->role, $allowedRoles)) {
+                if ($request->expectsJson()) {
+                    response()->json(['error' => 'Access denied.'], 403)->send();
+                    exit;
+                }
+                abort(403, 'Access denied.');
+            }
+        } elseif ($action === 'create' || $action === 'store' || $action === 'edit' || $action === 'update') {
+            $allowedRoles = ['manager', 'sales_rep'];
             if (!in_array($user->role, $allowedRoles)) {
                 if ($request->expectsJson()) {
                     response()->json(['error' => 'Access denied.'], 403)->send();
@@ -41,9 +51,17 @@ class OrderController extends Controller
         }
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with('client')->orderBy('created_at', 'desc')->get()->map(function ($order) {
+        $user = $request->user();
+        
+        $query = Order::with('client');
+        
+        if ($user->role === 'client' && $user->client_id) {
+            $query->where('client_id', $user->client_id);
+        }
+        
+        $orders = $query->orderBy('created_at', 'desc')->get()->map(function ($order) {
             $items = is_array($order->items) ? $order->items : json_decode($order->items, true);
             
             $items = array_map(function ($item) {
@@ -89,9 +107,63 @@ class OrderController extends Controller
         ]);
     }
 
-    public function show(Order $order)
+    public function show(Request $request, Order $order)
     {
+        $user = $request->user();
+        
+        if ($user->role === 'client' && $user->client_id !== $order->client_id) {
+            abort(403, 'Access denied.');
+        }
+        
         return redirect()->route('orders.edit', $order->id);
+    }
+
+    public function edit(Request $request, Order $order)
+    {
+        $user = $request->user();
+        
+        if ($user->role === 'client' && $user->client_id !== $order->client_id) {
+            abort(403, 'Access denied.');
+        }
+        
+        $order->load('client', 'payments', 'statusLogs.user');
+        
+        $items = is_array($order->items) ? $order->items : json_decode($order->items, true);
+        
+        $items = array_map(function ($item) {
+            if (!isset($item['product_name']) || empty($item['product_name'])) {
+                $product = \App\Models\Product::find($item['product_id']);
+                $item['product_name'] = $product ? $product->product_name : 'Unknown Product';
+            }
+            return $item;
+        }, $items);
+        
+        $products = Product::all();
+        $clients = Client::all();
+        
+        return Inertia::render('Orders/Edit', [
+            'order' => [
+                'id' => $order->id,
+                'order_id' => $order->order_id,
+                'client_id' => $order->client_id,
+                'client' => $order->client,
+                'items' => $items,
+                'subtotal' => (float) $order->subtotal,
+                'total' => (float) $order->total,
+                'total_paid' => $order->totalPaid(),
+                'total_due' => $order->totalDue(),
+                'status' => $order->status,
+                'is_vat' => (bool) $order->is_vat,
+                'delivery_date' => $order->delivery_date?->format('Y-m-d\TH:i'),
+                'created_at' => $order->created_at,
+                'order_created_at' => $order->order_created_at,
+                'payments' => $order->payments,
+                'statusLogs' => $order->statusLogs,
+            ],
+            'products' => $products,
+            'clients' => $clients,
+            'canManage' => in_array($user->role, ['manager', 'sales_rep']),
+        ]);
     }
 
     public function archived(Request $request)
@@ -201,33 +273,6 @@ class OrderController extends Controller
         ], $request);
 
         return redirect()->route('orders.index')->with('success', 'Order created successfully');
-    }
-
-    public function edit(Request $request, Order $order)
-    {
-        $this->authorizeOrderAccess($request);
-        
-        $clients = Client::all();
-        $products = Product::all();
-        
-        $items = is_array($order->items) ? $order->items : json_decode($order->items, true);
-        
-        return Inertia::render('Orders/Edit', [
-            'order' => [
-                'id' => $order->id,
-                'order_id' => $order->order_id,
-                'client_id' => $order->client_id,
-                'items' => $items,
-                'subtotal' => (float) $order->subtotal,
-                'total' => (float) $order->total,
-                'status' => $order->status,
-                'is_vat' => (bool) $order->is_vat,
-                'delivery_date' => $order->delivery_date?->format('Y-m-d\TH:i'),
-                'order_created_at' => $order->order_created_at,
-            ],
-            'clients' => $clients,
-            'products' => $products,
-        ]);
     }
 
     public function update(Request $request, Order $order)
@@ -557,7 +602,7 @@ class OrderController extends Controller
             $vatAmount = $order->total - $order->subtotal;
         }
         
-        return view('pdf.estimate', [
+        return view('pdf.invoice', [
             'order' => $order,
             'issueDate' => $issueDate,
             'documentType' => 'Invoice',

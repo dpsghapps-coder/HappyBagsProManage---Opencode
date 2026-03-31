@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HappyBags Pro Manager - Test Plan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #333;
+            padding: 20px;
+            max-width: 210mm;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 24px;
+            color: #1e3a5f;
+            margin-bottom: 5px;
+            border-bottom: 2px solid #6b21a8;
+            padding-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 16px;
+            color: #6b21a8;
+            margin: 20px 0 10px 0;
+            padding-left: 10px;
+            border-left: 3px solid #6b21a8;
+        }
+        h3 {
+            font-size: 13px;
+            color: #333;
+            margin: 15px 0 8px 0;
+            font-weight: 600;
+        }
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        li {
+            padding: 3px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        li:before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            color: #6b21a8;
+        }
+        .section {
+            margin-bottom: 15px;
+            break-inside: avoid;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 6px 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #6b21a8;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .header-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 10px;
+            color: #666;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+        .note {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-size: 10px;
+        }
+        @media print {
+            body {
+                padding: 0;
+            }
+            li:before {
+                content: "☐";
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-info">
+        <span>HappyBags Pro Manager</span>
+        <span>Test Plan Document</span>
+    </div>
+
+    <h1>HappyBags Pro Manager - Test Plan</h1>
+    <p class="subtitle">Comprehensive testing checklist for all application features</p>
+
+    <div class="note">
+        <strong>Test Execution Notes:</strong><br>
+        • Test with both Manager and Sales Rep roles<br>
+        • Always test: Happy path + Edge cases + Error handling<br>
+        • Ensure test data is prepared before testing
+    </div>
+
+    <h2>1. AUTHENTICATION & AUTHORIZATION</h2>
+
+    <div class="section">
+        <h3>1.1 Login/Logout</h3>
+        <ul>
+            <li>Login with valid manager credentials</li>
+            <li>Login with valid sales rep credentials</li>
+            <li>Login with invalid credentials (wrong password)</li>
+            <li>Login with non-existent user</li>
+            <li>Logout redirects to login page</li>
+            <li>Access protected route without login redirects to login</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>1.2 Role-Based Access Control (RBAC)</h3>
+        <ul>
+            <li>Manager can access /reports</li>
+            <li>Manager can access /audit</li>
+            <li>Manager can access /users</li>
+            <li>Sales rep CANNOT access /reports (redirected or error)</li>
+            <li>Sales rep CANNOT access /audit (redirected or error)</li>
+            <li>Sales rep CANNOT access /users (redirected or error)</li>
+            <li>Sales rep CAN access /orders and /dashboard</li>
+        </ul>
+    </div>
+
+    <h2>2. DASHBOARD</h2>
+
+    <div class="section">
+        <h3>2.1 Statistics Cards</h3>
+        <ul>
+            <li>Total Orders count is accurate</li>
+            <li>Total Clients count is accurate</li>
+            <li>Total Products count is accurate</li>
+            <li>Total Revenue displays correct sum (GHC)</li>
+            <li>Pending Orders shows correct count</li>
+            <li>Completed Orders shows correct count</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>2.2 Charts</h3>
+        <ul>
+            <li>Monthly Sales Trend chart renders</li>
+            <li>Orders by Status pie chart renders</li>
+            <li>Revenue by Category bar chart renders</li>
+            <li>Charts update when period filter changes (Today/Week/Month/Quarter)</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>2.3 Quick Actions & Recent Orders</h3>
+        <ul>
+            <li>"New Order" button navigates to order creation</li>
+            <li>"Add Client" button opens client modal</li>
+            <li>"Add Product" button opens product modal</li>
+            <li>"View Reports" navigates to reports page</li>
+            <li>Recent Orders list shows last 5 orders</li>
+            <li>Clicking recent order navigates to order detail</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>2.4 Keyboard Shortcuts</h3>
+        <ul>
+            <li>/ focuses search bar</li>
+            <li>N opens new order modal</li>
+            <li>C opens add client modal</li>
+            <li>P opens add product modal</li>
+            <li>D navigates to dashboard</li>
+            <li>? shows keyboard shortcuts help</li>
+        </ul>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>3. ORDERS MANAGEMENT</h2>
+
+    <div class="section">
+        <h3>3.1 Order List</h3>
+        <ul>
+            <li>All orders display in table</li>
+            <li>Search by order ID works</li>
+            <li>Search by client name works</li>
+            <li>Filter by status works (Active/All/Completed)</li>
+            <li>Expandable row shows order items</li>
+            <li>Status badges show correct colors</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>3.2 Order Status Workflow</h3>
+        <ul>
+            <li>New order starts at "Estimate Offered" status</li>
+            <li>"Advance Status" button moves to next stage</li>
+            <li>Order reaches "Order Completed" final state</li>
+            <li>Status history shows all transitions</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>3.3 Create Order</h3>
+        <ul>
+            <li>Select existing client from dropdown</li>
+            <li>Create new client during order (quick add)</li>
+            <li>Add multiple products to order</li>
+            <li>Quantity adjustment updates total</li>
+            <li>Discount (percentage) applies correctly</li>
+            <li>Discount (fixed amount) applies correctly</li>
+            <li>VAT toggle adds/removes 20%</li>
+            <li>Delivery date picker works</li>
+            <li>Delivery time picker works</li>
+            <li>Subtotal calculates correctly</li>
+            <li>Total calculates correctly</li>
+            <li>Order ID generates in format HPBG-YYYY-XXXX</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>3.4 Edit Order</h3>
+        <ul>
+            <li>Edit order items (add/remove/update quantity)</li>
+            <li>Edit client</li>
+            <li>Edit delivery date/time</li>
+            <li>Edit discount</li>
+            <li>Toggle VAT</li>
+            <li>Changes save correctly</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>3.5 Order Actions</h3>
+        <ul>
+            <li>View payment history</li>
+            <li>Add payment modal opens</li>
+            <li>Generate Estimate PDF</li>
+            <li>Generate Proforma PDF</li>
+            <li>Generate Invoice PDF</li>
+            <li>Generate Receipt PDF</li>
+            <li>Preview documents</li>
+            <li>Archive order (soft delete)</li>
+            <li>View status history</li>
+            <li>Revert status (manager only)</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>3.6 Archived Orders</h3>
+        <ul>
+            <li>View archived orders list</li>
+            <li>Restore archived order</li>
+            <li>Permanently delete order (manager only)</li>
+        </ul>
+    </div>
+
+    <h2>4. PAYMENTS</h2>
+
+    <div class="section">
+        <h3>4.1 Record Payment</h3>
+        <ul>
+            <li>Add payment to order</li>
+            <li>Enter amount (full or partial)</li>
+            <li>Select payment type (Hubtel/Other)</li>
+            <li>Payment saves to order</li>
+            <li>Order status auto-advances when fully paid</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>4.2 Payment Tracking</h3>
+        <ul>
+            <li>Total Paid updates after payment</li>
+            <li>Outstanding amount calculates correctly</li>
+            <li>Payment history shows all payments</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>4.3 Delete Payment (Manager Only)</h3>
+        <ul>
+            <li>Delete payment removes it from order</li>
+            <li>Order totals recalculate correctly</li>
+        </ul>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>5. PRODUCTS</h2>
+
+    <div class="section">
+        <h3>5.1 Product List</h3>
+        <ul>
+            <li>All products display in grid</li>
+            <li>Search by product name works</li>
+            <li>Search by category works</li>
+            <li>Search by dimension works</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>5.2 CRUD Operations</h3>
+        <ul>
+            <li>Add new product (all fields)</li>
+            <li>Edit existing product</li>
+            <li>Delete product (manager only)</li>
+            <li>Product appears in order creation dropdown</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>5.3 Product Categories</h3>
+        <ul>
+            <li>Paper Bag</li>
+            <li>Plastic Bag</li>
+            <li>Non-woven Bag</li>
+            <li>Jute Bag</li>
+            <li>Canvas Bag</li>
+            <li>Reusable Bag</li>
+            <li>Custom</li>
+        </ul>
+    </div>
+
+    <h2>6. CLIENTS</h2>
+
+    <div class="section">
+        <h3>6.1 Client List</h3>
+        <ul>
+            <li>All clients display in grid</li>
+            <li>Search by client name works</li>
+            <li>Search by email works</li>
+            <li>Search by phone works</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>6.2 CRUD Operations</h3>
+        <ul>
+            <li>Add new client (all required fields)</li>
+            <li>Edit existing client</li>
+            <li>Delete client (manager only, only if no orders)</li>
+            <li>Delete client fails if orders exist</li>
+        </ul>
+    </div>
+
+    <h2>7. REPORTS (Manager Only)</h2>
+
+    <div class="section">
+        <h3>7.1 Date Filtering</h3>
+        <ul>
+            <li>From/To date pickers work</li>
+            <li>"This Week" preset works</li>
+            <li>"Today" preset works</li>
+            <li>"This Month" preset works</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>7.2 Report Generation</h3>
+        <ul>
+            <li>Sales Summary - Preview loads data</li>
+            <li>Sales Summary - PDF download works</li>
+            <li>Sales Summary - Excel download works</li>
+            <li>Sales by Product - Preview loads data</li>
+            <li>Sales by Client - Preview loads data</li>
+            <li>Sales by Sales Rep - Preview loads data</li>
+            <li>Revenue Report - Preview loads data</li>
+            <li>Revenue Report - PDF/Excel download</li>
+            <li>Outstanding Payments - Preview loads data</li>
+            <li>Payment Summary - Preview loads data</li>
+            <li>Order Summary - Preview loads data</li>
+            <li>Orders by Status - Preview loads data</li>
+            <li>Delivery Schedule - Preview loads data</li>
+            <li>Client Directory - Preview loads data</li>
+            <li>Client Order History - Preview loads data</li>
+            <li>Product Sales Summary - Preview loads data</li>
+            <li>Top Selling Products - Preview loads data</li>
+        </ul>
+    </div>
+
+    <h2>8. AUDIT LOGS (Manager Only)</h2>
+
+    <div class="section">
+        <h3>8.1 Viewing Logs</h3>
+        <ul>
+            <li>All activities display in list</li>
+            <li>Filter by entity type works</li>
+            <li>Filter by action works</li>
+            <li>Filter by date range works</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>8.2 Log Details</h3>
+        <ul>
+            <li>User who performed action is shown</li>
+            <li>Timestamp is accurate</li>
+            <li>IP Address is captured</li>
+            <li>Old values shown for updates</li>
+            <li>New values shown for updates</li>
+        </ul>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>9. USER MANAGEMENT (Manager Only)</h2>
+
+    <div class="section">
+        <h3>9.1 User List</h3>
+        <ul>
+            <li>All users display</li>
+            <li>User roles shown correctly</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>9.2 CRUD Operations</h3>
+        <ul>
+            <li>Create new user</li>
+            <li>Assign role (Manager/Sales Rep/Client)</li>
+            <li>Edit user details</li>
+            <li>Delete user (cannot delete last manager)</li>
+            <li>Link client to user account</li>
+        </ul>
+    </div>
+
+    <h2>10. PROFILE</h2>
+
+    <div class="section">
+        <ul>
+            <li>View profile information</li>
+            <li>Update name</li>
+            <li>Update email</li>
+            <li>Update password</li>
+            <li>Delete account</li>
+        </ul>
+    </div>
+
+    <h2>11. EDGE CASES & ERROR HANDLING</h2>
+
+    <div class="section">
+        <h3>11.1 Orders</h3>
+        <ul>
+            <li>Create order with zero products (should fail validation)</li>
+            <li>Create order without client (should fail)</li>
+            <li>Advance status when already complete (button disabled)</li>
+            <li>Negative quantity (should be prevented)</li>
+            <li>Negative discount (should be prevented)</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>11.2 Products</h3>
+        <ul>
+            <li>Negative price (should be prevented)</li>
+            <li>Delete product used in orders (manager only - allow but check impact)</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>11.3 Clients</h3>
+        <ul>
+            <li>Duplicate client name (allow but warn)</li>
+            <li>Delete client with orders (should fail with message)</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>11.4 Payments</h3>
+        <ul>
+            <li>Payment amount exceeds order total (should warn)</li>
+            <li>Negative payment amount (should fail)</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>11.5 Reports</h3>
+        <ul>
+            <li>Date range with no data (show "No data available")</li>
+            <li>Invalid date range (to < from - should fail validation)</li>
+        </ul>
+    </div>
+
+    <h2>12. RESPONSIVE DESIGN</h2>
+
+    <div class="section">
+        <ul>
+            <li>Desktop layout renders correctly</li>
+            <li>Tablet layout renders correctly</li>
+            <li>Mobile layout renders correctly</li>
+            <li>Sidebar collapses on mobile</li>
+            <li>Bottom navigation appears on mobile</li>
+            <li>All buttons are touch-friendly on mobile</li>
+        </ul>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>TEST DATA CHECKLIST</h2>
+
+    <div class="note">
+        Before testing, ensure you have the following test data:
+    </div>
+
+    <table>
+        <tr>
+            <th>Data Type</th>
+            <th>Quantity</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>Users (1 Manager, 1+ Sales Rep)</td>
+            <td>At least 2</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Products (various categories)</td>
+            <td>At least 10</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Clients</td>
+            <td>At least 5</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Orders (various statuses)</td>
+            <td>At least 10</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Orders with partial payments</td>
+            <td>At least 5</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Completed orders</td>
+            <td>At least 3</td>
+            <td></td>
+        </tr>
+    </table>
+
+    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ccc; font-size: 10px; color: #666;">
+        <p><strong>Document Generated:</strong> March 2026</p>
+        <p><strong>Application:</strong> HappyBags Pro Manager</p>
+        <p><strong>Version:</strong> 1.0</p>
+    </div>
+
+</body>
+</html>

@@ -23,6 +23,8 @@ import {
     Archive,
     Shield,
 } from 'lucide-react';
+import AddClientModal from '@/Components/AddClientModal';
+import AddProductModal from '@/Components/AddProductModal';
 
 interface NavItem {
     name: string;
@@ -73,12 +75,14 @@ export default function Authenticated({
     header,
     children,
 }: PropsWithChildren<{ header?: React.ReactNode }>) {
-    const user = usePage().props.auth.user;
+    const user = usePage().props.auth?.user ?? null;
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [fabOpen, setFabOpen] = useState(false);
     const [globalSearch, setGlobalSearch] = useState('');
     const [showShortcutsHelp, setShowShortcutsHelp] = useState(false);
+    const [showAddClientModal, setShowAddClientModal] = useState(false);
+    const [showAddProductModal, setShowAddProductModal] = useState(false);
     const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
     const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -107,6 +111,8 @@ export default function Authenticated({
             setFabOpen(false);
             setMobileMenuOpen(false);
             setShowShortcutsHelp(false);
+            setShowAddClientModal(false);
+            setShowAddProductModal(false);
             return;
         }
 
@@ -127,11 +133,11 @@ export default function Authenticated({
                 break;
             case 'c':
                 event.preventDefault();
-                window.location.href = '/clients/create';
+                setShowAddClientModal(true);
                 break;
             case 'p':
                 event.preventDefault();
-                window.location.href = '/products/create';
+                setShowAddProductModal(true);
                 break;
             case 'd':
                 event.preventDefault();
@@ -153,6 +159,8 @@ export default function Authenticated({
         return currentUrl.startsWith(pattern.replace('*', ''));
     };
 
+    const userRole = user?.role ?? 'sales_rep';
+    
     const navSections = {
         operations: [
             {
@@ -167,46 +175,50 @@ export default function Authenticated({
                 icon: <ShoppingCart size={20} />,
                 active: isActive('orders'),
             },
-            {
+            ...(userRole === 'manager' || userRole === 'sales_rep' ? [{
                 name: 'Archived',
                 href: '/orders/archived',
                 icon: <Archive size={20} />,
                 active: window.location.pathname === '/orders/archived',
-            },
-            {
-                name: 'Products',
-                href: '/products',
-                icon: <Package size={20} />,
-                active: isActive('products'),
-            },
-            {
-                name: 'Clients',
-                href: '/clients',
-                icon: <Users size={20} />,
-                active: isActive('clients'),
-            },
+            }] : []),
+            ...(userRole === 'manager' ? [
+                {
+                    name: 'Products',
+                    href: '/products',
+                    icon: <Package size={20} />,
+                    active: isActive('products'),
+                },
+                {
+                    name: 'Clients',
+                    href: '/clients',
+                    icon: <Users size={20} />,
+                    active: isActive('clients'),
+                },
+            ] : []),
         ],
         finance: [
-            {
+            ...(userRole === 'manager' ? [{
                 name: 'Reports',
                 href: '/reports',
                 icon: <FileBarChart size={20} />,
                 active: isActive('reports'),
-            },
+            }] : []),
         ],
         settings: [
-            {
-                name: 'Audit Logs',
-                href: '/audit',
-                icon: <Shield size={20} />,
-                active: isActive('audit'),
-            },
-            {
-                name: 'Users',
-                href: '/users',
-                icon: <UserCircle size={20} />,
-                active: isActive('users'),
-            },
+            ...(userRole === 'manager' ? [
+                {
+                    name: 'Audit Logs',
+                    href: '/audit',
+                    icon: <Shield size={20} />,
+                    active: isActive('audit'),
+                },
+                {
+                    name: 'Users',
+                    href: '/users',
+                    icon: <UserCircle size={20} />,
+                    active: isActive('users'),
+                },
+            ] : []),
             {
                 name: 'Profile',
                 href: '/profile',
@@ -237,15 +249,21 @@ export default function Authenticated({
     const bottomNavItems = [
         { name: 'Dashboard', href: '/dashboard', icon: <LayoutDashboard size={24} />, active: isActive('dashboard') },
         { name: 'Orders', href: '/orders', icon: <ShoppingCart size={24} />, active: isActive('orders') },
-        { name: 'Products', href: '/products', icon: <Package size={24} />, active: isActive('products') },
-        { name: 'Clients', href: '/clients', icon: <Users size={24} />, active: isActive('clients') },
+        ...(userRole === 'manager' ? [
+            { name: 'Products', href: '/products', icon: <Package size={24} />, active: isActive('products') },
+            { name: 'Clients', href: '/clients', icon: <Users size={24} />, active: isActive('clients') },
+        ] : []),
         { name: 'More', href: '#', icon: <Menu size={24} />, active: false, isMore: true },
     ];
 
     const fabActions = [
-        { name: 'New Order', href: '/orders/create', icon: <FileText size={20} /> },
-        { name: 'Add Client', href: '/clients/create', icon: <Users size={20} /> },
-        { name: 'New Product', href: '/products/create', icon: <Package size={20} /> },
+        ...(userRole === 'manager' || userRole === 'sales_rep' ? [
+            { name: 'New Order', href: '/orders/create', icon: <FileText size={20} />, onClick: () => window.location.href = '/orders/create' },
+        ] : []),
+        ...(userRole === 'manager' ? [
+            { name: 'Add Client', href: '/clients/create', icon: <Users size={20} />, onClick: () => { setFabOpen(false); setShowAddClientModal(true); } },
+            { name: 'New Product', href: '/products/create', icon: <Package size={20} />, onClick: () => { setFabOpen(false); setShowAddProductModal(true); } },
+        ] : []),
     ];
 
     const handleGlobalSearch = (e: React.FormEvent) => {
@@ -436,8 +454,8 @@ export default function Authenticated({
                         </div>
 
                         <nav className="p-4 space-y-1">
-                            <div className="text-xs font-semibold text-white/40 uppercase tracking-wider px-4 py-2">Operations</div>
-                            {[...navSections.operations, ...navSections.finance].map(item => (
+                            <div className="text-xs font-semibold text-white/40 uppercase tracking-wider px-4 py-2">Finance</div>
+                            {navSections.finance.map(item => (
                                 <Link
                                     key={item.name}
                                     href={item.href}
@@ -532,18 +550,32 @@ export default function Authenticated({
                 {/* FAB Menu */}
                 <div className={`absolute bottom-16 right-0 flex flex-col gap-2 items-end transition-all duration-300 ${fabOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
                     {fabActions.map((action, index) => (
-                        <Link
-                            key={action.name}
-                            href={action.href}
-                            onClick={() => setFabOpen(false)}
-                            className="flex items-center gap-3 glass-card px-4 py-2.5 rounded-xl animate-slide-up"
-                            style={{ animationDelay: `${index * 50}ms` }}
-                        >
-                            <span className="text-sm font-medium text-gray-700">{action.name}</span>
-                            <div className="w-8 h-8 rounded-lg bg-accent-100 flex items-center justify-center text-accent-600">
-                                {action.icon}
-                            </div>
-                        </Link>
+                        action.onClick ? (
+                            <button
+                                key={action.name}
+                                onClick={action.onClick}
+                                className="flex items-center gap-3 glass-card px-4 py-2.5 rounded-xl animate-slide-up"
+                                style={{ animationDelay: `${index * 50}ms` }}
+                            >
+                                <span className="text-sm font-medium text-gray-700">{action.name}</span>
+                                <div className="w-8 h-8 rounded-lg bg-accent-100 flex items-center justify-center text-accent-600">
+                                    {action.icon}
+                                </div>
+                            </button>
+                        ) : (
+                            <Link
+                                key={action.name}
+                                href={action.href}
+                                onClick={() => setFabOpen(false)}
+                                className="flex items-center gap-3 glass-card px-4 py-2.5 rounded-xl animate-slide-up"
+                                style={{ animationDelay: `${index * 50}ms` }}
+                            >
+                                <span className="text-sm font-medium text-gray-700">{action.name}</span>
+                                <div className="w-8 h-8 rounded-lg bg-accent-100 flex items-center justify-center text-accent-600">
+                                    {action.icon}
+                                </div>
+                            </Link>
+                        )
                     ))}
                 </div>
                 
@@ -665,6 +697,18 @@ export default function Authenticated({
                     animation: ripple 0.6s ease-out forwards;
                 }
             `}</style>
+
+            <AddClientModal
+                show={showAddClientModal}
+                onClose={() => setShowAddClientModal(false)}
+                onSuccess={() => {}}
+            />
+
+            <AddProductModal
+                show={showAddProductModal}
+                onClose={() => setShowAddProductModal(false)}
+                onSuccess={() => {}}
+            />
         </div>
     );
 }

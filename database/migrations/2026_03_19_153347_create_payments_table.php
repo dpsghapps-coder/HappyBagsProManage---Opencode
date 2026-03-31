@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->decimal('amount', 10, 2);
-            $table->enum('payment_type', ['Hubtel']);
+            $table->enum('payment_type', ['Cash', 'Mobile Money', 'Bank Transfer', 'Cheque', 'Hubtel', 'Apps & Mobile']);
             $table->timestamp('payment_timestamp')->useCurrent();
             $table->timestamps();
         });

@@ -195,18 +195,18 @@ export default function Create({ clients, products }: Props) {
         <AuthenticatedLayout>
             <Head title="Create Order" />
 
-            <div className="p-6 max-w-4xl mx-auto">
-                <h1 className="text-2xl font-bold mb-6">Create New Order</h1>
+            <div className="p-4 md:p-6 max-w-4xl mx-auto">
+                <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Create New Order</h1>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Client Information</CardTitle>
+                            <CardTitle className="text-base md:text-lg">Client Information</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="relative" ref={clientDropdownRef}>
-                                <Label htmlFor="client_id">Select Client</Label>
-                                <div className="relative">
+                                <Label htmlFor="client_id" className="text-sm">Select Client</Label>
+                                <div className="relative mt-1">
                                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                                     <input
                                         type="text"
@@ -217,7 +217,7 @@ export default function Create({ clients, products }: Props) {
                                         }}
                                         onFocus={() => setShowClientDropdown(true)}
                                         placeholder="Search for a client..."
-                                        className="w-full h-10 pl-10 pr-10 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                        className="w-full h-12 md:h-10 pl-10 pr-10 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
                                         required
                                     />
                                     {clientSearch && (
@@ -270,15 +270,17 @@ export default function Create({ clients, products }: Props) {
                     </Card>
 
                     <Card>
-                        <CardHeader className="flex flex-row items-center justify-between">
-                            <CardTitle>Order Items</CardTitle>
-                            <Button type="button" variant="outline" size="sm" onClick={addItem}>
-                                Add Item
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <CardTitle className="text-base md:text-lg">Order Items</CardTitle>
+                            <Button type="button" variant="outline" size="sm" onClick={addItem} className="h-8">
+                                <Plus className="w-4 h-4 mr-1" />
+                                <span className="hidden sm:inline">Add Item</span>
+                                <span className="sm:inline">Add</span>
                             </Button>
                         </CardHeader>
                         <CardContent className="space-y-3">
-                            {/* Header Row */}
-                            <div className="flex items-center text-sm font-medium text-gray-600 px-2 gap-4">
+                            {/* Desktop Header Row */}
+                            <div className="hidden md:flex items-center text-sm font-medium text-gray-600 px-2 gap-4">
                                 <div className="flex-1">Product</div>
                                 <div className="w-20 text-center">Qty</div>
                                 <div className="w-40 flex items-center gap-1">
@@ -300,14 +302,19 @@ export default function Create({ clients, products }: Props) {
                                 }
                                 
                                 return (
-                                <div key={index} className="flex items-end gap-4">
-                                    <div className="flex-1">
+                                <div key={index} className="bg-gray-50 md:bg-transparent rounded-lg p-3 md:p-0 border md:border-0 border-gray-200">
+                                    {/* Mobile View - Stacked Layout */}
+                                    <div className="md:hidden space-y-3">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-xs font-medium text-gray-500">Product</span>
+                                            <span className="text-sm font-medium text-gray-800">GHC {unitPrice.toFixed(2)}</span>
+                                        </div>
                                         <select
                                             value={item.product_id}
                                             onChange={(e) => updateItem(index, 'product_id', parseInt(e.target.value))}
                                             className="w-full h-12 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm"
                                         >
-                                            <option value={0}>Select</option>
+                                            <option value={0}>Select Product</option>
                                             {products.map((product) => {
                                                 const isSelected = items.some((i, idx) => idx !== index && i.product_id === product.id);
                                                 return (
@@ -317,50 +324,130 @@ export default function Create({ clients, products }: Props) {
                                                 );
                                             })}
                                         </select>
-                                    </div>
-                                    <div className="w-20">
-                                        <Input
-                                            type="number"
-                                            min="1"
-                                            value={item.qty}
-                                            onChange={(e) => updateItem(index, 'qty', parseInt(e.target.value) || 1)}
-                                            className="h-12 text-center"
-                                        />
-                                    </div>
-                                    <div className="w-40 flex items-center gap-1">
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            value={item.discount}
-                                            onChange={(e) => updateItem(index, 'discount', parseFloat(e.target.value) || 0)}
-                                            className="h-12 w-16"
-                                        />
-                                        <div className="flex rounded-lg overflow-hidden border border-gray-300 h-12">
-                                            <button 
-                                                type="button"
-                                                onClick={() => updateItem(index, 'discount_type', 'percentage')}
-                                                className={`px-3 h-full flex items-center justify-center text-sm ${item.discount_type === 'percentage' ? 'bg-purple-500 text-white' : 'bg-gray-100'}`}
-                                            >
-                                                %
-                                            </button>
-                                            <button 
-                                                type="button"
-                                                onClick={() => updateItem(index, 'discount_type', 'value')}
-                                                className={`px-2 h-full flex items-center justify-center text-xs ${item.discount_type === 'value' ? 'bg-purple-500 text-white' : 'bg-gray-100'}`}
-                                            >
-                                                GH
-                                            </button>
+                                        
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div>
+                                                <label className="text-xs font-medium text-gray-500 block mb-1">Qty</label>
+                                                <Input
+                                                    type="number"
+                                                    min="1"
+                                                    value={item.qty}
+                                                    onChange={(e) => updateItem(index, 'qty', parseInt(e.target.value) || 1)}
+                                                    className="h-12"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="text-xs font-medium text-gray-500 block mb-1">Discount</label>
+                                                <div className="flex items-center gap-1 h-12">
+                                                    <Input
+                                                        type="number"
+                                                        min="0"
+                                                        value={item.discount}
+                                                        onChange={(e) => updateItem(index, 'discount', parseFloat(e.target.value) || 0)}
+                                                        className="h-12 flex-1"
+                                                    />
+                                                    <div className="flex rounded-lg overflow-hidden border border-gray-300 h-12">
+                                                        <button 
+                                                            type="button"
+                                                            onClick={() => updateItem(index, 'discount_type', 'percentage')}
+                                                            className={`px-3 h-full flex items-center justify-center text-sm ${item.discount_type === 'percentage' ? 'bg-purple-500 text-white' : 'bg-gray-100'}`}
+                                                        >
+                                                            %
+                                                        </button>
+                                                        <button 
+                                                            type="button"
+                                                            onClick={() => updateItem(index, 'discount_type', 'value')}
+                                                            className={`px-2 h-full flex items-center justify-center text-xs ${item.discount_type === 'value' ? 'bg-purple-500 text-white' : 'bg-gray-100'}`}
+                                                        >
+                                                            GH
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="w-24 text-right font-medium h-12 flex items-center justify-end">
-                                        {lineTotal.toFixed(2)}
-                                    </div>
-                                    <div className="w-10">
+                                        
+                                        <div className="flex items-center justify-between pt-2 border-t border-gray-200">
+                                            <span className="text-sm font-medium text-gray-600">Line Total</span>
+                                            <span className="text-lg font-bold text-purple-600">GHC {lineTotal.toFixed(2)}</span>
+                                        </div>
+                                        
                                         {items.length > 1 && (
-                                            <Button type="button" variant="destructive" size="sm" onClick={() => removeItem(index)} className="h-10 w-10 p-0">
-                                                X
+                                            <Button 
+                                                type="button" 
+                                                variant="destructive" 
+                                                size="sm" 
+                                                onClick={() => removeItem(index)}
+                                                className="w-full h-10"
+                                            >
+                                                <X className="w-4 h-4 mr-1" />
+                                                Remove Item
                                             </Button>
                                         )}
+                                    </div>
+
+                                    {/* Desktop View - Horizontal Layout */}
+                                    <div className="hidden md:flex items-end gap-4">
+                                        <div className="flex-1">
+                                            <select
+                                                value={item.product_id}
+                                                onChange={(e) => updateItem(index, 'product_id', parseInt(e.target.value))}
+                                                className="w-full h-12 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm"
+                                            >
+                                                <option value={0}>Select</option>
+                                                {products.map((product) => {
+                                                    const isSelected = items.some((i, idx) => idx !== index && i.product_id === product.id);
+                                                    return (
+                                                        <option key={product.id} value={product.id} disabled={isSelected}>
+                                                            {product.product_name} - GHC {parseFloat(String(product.unit_price)).toFixed(2)}{isSelected ? ' (Selected)' : ''}
+                                                        </option>
+                                                    );
+                                                })}
+                                            </select>
+                                        </div>
+                                        <div className="w-20">
+                                            <Input
+                                                type="number"
+                                                min="1"
+                                                value={item.qty}
+                                                onChange={(e) => updateItem(index, 'qty', parseInt(e.target.value) || 1)}
+                                                className="h-12 text-center"
+                                            />
+                                        </div>
+                                        <div className="w-40 flex items-center gap-1">
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                value={item.discount}
+                                                onChange={(e) => updateItem(index, 'discount', parseFloat(e.target.value) || 0)}
+                                                className="h-12 w-16"
+                                            />
+                                            <div className="flex rounded-lg overflow-hidden border border-gray-300 h-12">
+                                                <button 
+                                                    type="button"
+                                                    onClick={() => updateItem(index, 'discount_type', 'percentage')}
+                                                    className={`px-3 h-full flex items-center justify-center text-sm ${item.discount_type === 'percentage' ? 'bg-purple-500 text-white' : 'bg-gray-100'}`}
+                                                >
+                                                    %
+                                                </button>
+                                                <button 
+                                                    type="button"
+                                                    onClick={() => updateItem(index, 'discount_type', 'value')}
+                                                    className={`px-2 h-full flex items-center justify-center text-xs ${item.discount_type === 'value' ? 'bg-purple-500 text-white' : 'bg-gray-100'}`}
+                                                >
+                                                    GH
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className="w-24 text-right font-medium h-12 flex items-center justify-end">
+                                            {lineTotal.toFixed(2)}
+                                        </div>
+                                        <div className="w-10">
+                                            {items.length > 1 && (
+                                                <Button type="button" variant="destructive" size="sm" onClick={() => removeItem(index)} className="h-10 w-10 p-0">
+                                                    X
+                                                </Button>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                                 );
@@ -370,12 +457,12 @@ export default function Create({ clients, products }: Props) {
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Order Details</CardTitle>
+                            <CardTitle className="text-base md:text-lg">Order Details</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <Label htmlFor="delivery_date" className="flex items-center gap-1">
+                                    <Label htmlFor="delivery_date" className="flex items-center gap-1 text-sm">
                                         Delivery Date <span className="text-red-500">*</span>
                                     </Label>
                                     <Input
@@ -384,6 +471,7 @@ export default function Create({ clients, products }: Props) {
                                         value={data.delivery_date}
                                         onChange={(e) => setData('delivery_date', e.target.value)}
                                         min={new Date().toISOString().split('T')[0]}
+                                        className="h-12 md:h-10 mt-1"
                                         required
                                     />
                                     {errors.delivery_date && (
@@ -391,14 +479,14 @@ export default function Create({ clients, products }: Props) {
                                     )}
                                 </div>
                                 <div>
-                                    <Label htmlFor="delivery_time" className="flex items-center gap-1">
+                                    <Label htmlFor="delivery_time" className="flex items-center gap-1 text-sm">
                                         Delivery Time <span className="text-red-500">*</span>
                                     </Label>
                                     <select
                                         id="delivery_time"
                                         value={data.delivery_time}
                                         onChange={(e) => setData('delivery_time', e.target.value)}
-                                        className="flex h-12 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm"
+                                        className="flex h-12 md:h-10 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm mt-1"
                                         required
                                     >
                                         <option value="00:00">12:00 AM</option>
@@ -434,9 +522,9 @@ export default function Create({ clients, products }: Props) {
                                     type="checkbox"
                                     checked={data.is_vat}
                                     onChange={(e) => setData('is_vat', e.target.checked)}
-                                    className="rounded border-gray-300"
+                                    className="rounded border-gray-300 w-5 h-5"
                                 />
-                                <Label htmlFor="is_vat">Apply VAT (20%)</Label>
+                                <Label htmlFor="is_vat" className="text-sm">Apply VAT (20%)</Label>
                             </div>
 
                             <div className="border-t pt-4 space-y-2">
@@ -452,17 +540,17 @@ export default function Create({ clients, products }: Props) {
                                 )}
                                 <div className="flex justify-between font-bold text-lg">
                                     <span>Total:</span>
-                                    <span>GHC {total.toFixed(2)}</span>
+                                    <span className="text-purple-600">GHC {total.toFixed(2)}</span>
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
 
-                    <div className="flex gap-4 justify-end">
-                        <Button type="button" variant="outline" onClick={() => window.history.back()}>
+                    <div className="flex gap-3 md:gap-4 justify-end">
+                        <Button type="button" variant="outline" onClick={() => window.history.back()} className="h-12 md:h-10 flex-1 md:flex-none">
                             Cancel
                         </Button>
-                        <Button type="submit" disabled={processing}>
+                        <Button type="submit" disabled={processing} className="h-12 md:h-10 flex-1 md:flex-none">
                             Create Order
                         </Button>
                     </div>

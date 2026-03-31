@@ -13,14 +13,17 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        $user = $request->user();
+        $isClient = $user->role === 'client' && $user->client_id;
+        
         $period = $request->get('period', 'monthly');
         $dateRange = $this->getDateRange($period);
         
-        $stats = $this->getStats($dateRange);
-        $recentOrders = $this->getRecentOrders();
-        $ordersByStatus = $this->getOrdersByStatus($dateRange);
-        $monthlySales = $this->getMonthlySales($dateRange);
-        $categoryRevenue = $this->getCategoryRevenue($dateRange);
+        $stats = $this->getStats($dateRange, $isClient ? $user->client_id : null);
+        $recentOrders = $this->getRecentOrders($isClient ? $user->client_id : null);
+        $ordersByStatus = $this->getOrdersByStatus($dateRange, $isClient ? $user->client_id : null);
+        $monthlySales = $this->getMonthlySales($dateRange, $isClient ? $user->client_id : null);
+        $categoryRevenue = $this->getCategoryRevenue($dateRange, $isClient ? $user->client_id : null);
 
         return Inertia::render('Dashboard', [
             'stats' => $stats,
@@ -29,6 +32,7 @@ class DashboardController extends Controller
             'monthlySales' => $monthlySales,
             'categoryRevenue' => $categoryRevenue,
             'selectedPeriod' => $period,
+            'isClient' => $isClient,
         ]);
     }
 
@@ -60,31 +64,42 @@ class DashboardController extends Controller
         };
     }
 
-    private function getStats(array $dateRange): array
+    private function getStats(array $dateRange, ?int $clientId = null): array
     {
         $start = $dateRange['start'];
         $end = $dateRange['end'];
         
+        $orderQuery = function($query) use ($start, $end, $clientId) {
+            $query->whereBetween('order_created_at', [$start, $end]);
+            if ($clientId) {
+                $query->where('client_id', $clientId);
+            }
+            return $query;
+        };
+        
         return [
-            'totalOrders' => Order::whereBetween('order_created_at', [$start, $end])->count(),
-            'totalClients' => Client::count(),
+            'totalOrders' => Order::where($orderQuery)->count(),
+            'totalClients' => $clientId ? 1 : Client::count(),
             'totalProducts' => Product::count(),
-            'totalRevenue' => (float) Order::whereBetween('order_created_at', [$start, $end])
+            'totalRevenue' => (float) Order::where($orderQuery)
                 ->where('status', '!=', 'Estimate Offered')
                 ->sum('total'),
-            'pendingOrders' => Order::whereBetween('order_created_at', [$start, $end])
+            'pendingOrders' => Order::where($orderQuery)
                 ->whereIn('status', ['Estimate Offered', 'Invoice Created'])
                 ->count(),
-            'completedOrders' => Order::whereBetween('order_created_at', [$start, $end])
+            'completedOrders' => Order::where($orderQuery)
                 ->where('status', 'Order Completed')
                 ->count(),
         ];
     }
 
-    private function getRecentOrders()
+    private function getRecentOrders(?int $clientId = null)
     {
-        return Order::with('client')
-            ->orderBy('created_at', 'desc')
+        $query = Order::with('client');
+        if ($clientId) {
+            $query->where('client_id', $clientId);
+        }
+        return $query->orderBy('created_at', 'desc')
             ->limit(5)
             ->get()
             ->map(function ($order) {
@@ -101,25 +116,34 @@ class DashboardController extends Controller
             });
     }
 
-    private function getOrdersByStatus(array $dateRange): array
+    private function getOrdersByStatus(array $dateRange, ?int $clientId = null): array
     {
         $start = $dateRange['start'];
         $end = $dateRange['end'];
         
-        return Order::whereBetween('order_created_at', [$start, $end])
-            ->select('status')
+        $query = Order::whereBetween('order_created_at', [$start, $end]);
+        if ($clientId) {
+            $query->where('client_id', $clientId);
+        }
+        
+        return $query->select('status')
             ->selectRaw('count(*) as count')
             ->groupBy('status')
             ->get()
             ->toArray();
     }
 
-    private function getMonthlySales(array $dateRange): array
+    private function getMonthlySales(array $dateRange, ?int $clientId = null): array
     {
         $start = $dateRange['start'];
         $end = $dateRange['end'];
         
-        $sales = Order::whereBetween('order_created_at', [$start, $end])
+        $query = Order::whereBetween('order_created_at', [$start, $end]);
+        if ($clientId) {
+            $query->where('client_id', $clientId);
+        }
+        
+        $sales = $query
             ->where('status', '!=', 'Estimate Offered')
             ->selectRaw('strftime("%Y-%m", order_created_at) as month')
             ->selectRaw('sum(total) as total')
@@ -136,12 +160,17 @@ class DashboardController extends Controller
         return $sales->toArray();
     }
 
-    private function getCategoryRevenue(array $dateRange): array
+    private function getCategoryRevenue(array $dateRange, ?int $clientId = null): array
     {
         $start = $dateRange['start'];
         $end = $dateRange['end'];
         
-        $orders = Order::whereBetween('order_created_at', [$start, $end])
+        $query = Order::whereBetween('order_created_at', [$start, $end]);
+        if ($clientId) {
+            $query->where('client_id', $clientId);
+        }
+        
+        $orders = $query
             ->where('status', '!=', 'Estimate Offered')
             ->get();
             

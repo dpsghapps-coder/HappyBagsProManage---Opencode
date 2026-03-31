@@ -268,13 +268,17 @@
   }
 
   .mobile-menu-panel {
-    @apply fixed top-0 right-0 h-full w-72;
+    @apply fixed top-0 right-0 bottom-16 w-72;
     background: linear-gradient(180deg, rgba(124, 58, 237, 0.95) 0%, rgba(91, 33, 182, 0.98) 100%);
     backdrop-filter: blur(20px);
     border-left: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 50;
+    z-index: 60;
     box-shadow: -8px 0 32px rgba(0, 0, 0, 0.3);
     animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .mobile-menu-panel nav {
+    padding-bottom: 80px;
   }
 
   .mobile-menu-item {

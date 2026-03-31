@@ -42,7 +42,7 @@ class PaymentController extends Controller
     {
         $validated = $request->validate([
             'amount' => 'required|numeric|min:0.01',
-            'payment_type' => 'required|in:Hubtel',
+            'payment_type' => 'required|in:Cash,Mobile Money,Bank Transfer,Cheque,Hubtel,Apps & Mobile',
         ]);
 
         $payment = Payment::create([

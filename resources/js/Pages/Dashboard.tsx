@@ -8,7 +8,8 @@ import GlassmorphicChartCard from '@/Components/GlassmorphicChartCard';
 import GlassmorphicTooltip from '@/Components/GlassmorphicTooltip';
 import { EmptyState } from '@/Components/EmptyState';
 import { CHART_COLORS } from '@/config/chartColors';
-import { FileText, DollarSign, Clock, Users, Package, TrendingUp, ArrowRight, Plus, ShoppingCart, UserPlus, Box, Calendar } from 'lucide-react';
+import { FileText, Clock, Users, Package, TrendingUp, ArrowRight, Plus, ShoppingCart, UserPlus, Box, Calendar } from 'lucide-react';
+import GhanaCedi from '@/Components/GhanaCedi';
 import { Link } from '@inertiajs/react';
 
 function useWindowSize() {
@@ -149,6 +150,7 @@ interface Props {
     monthlySales: MonthlyData[];
     categoryRevenue: CategoryData[];
     selectedPeriod: string;
+    isClient?: boolean;
 }
 
 const STATUS_COLORS: Record<string, string> = {
@@ -210,7 +212,7 @@ const PERIOD_OPTIONS = [
     { value: 'quarterly', label: 'This Quarter' },
 ];
 
-export default function Dashboard({ stats, recentOrders, ordersByStatus, monthlySales, categoryRevenue, selectedPeriod }: Props) {
+export default function Dashboard({ stats, recentOrders, ordersByStatus, monthlySales, categoryRevenue, selectedPeriod, isClient = false }: Props) {
     const [period, setPeriod] = useState(selectedPeriod);
 
     const handlePeriodChange = (newPeriod: string) => {
@@ -237,40 +239,42 @@ export default function Dashboard({ stats, recentOrders, ordersByStatus, monthly
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
-                        <p className="text-sm text-gray-500 mt-1">Welcome back! Here's what's happening with your business.</p>
+                        <h1 className="text-2xl font-bold text-gray-800">{isClient ? 'My Orders' : 'Dashboard'}</h1>
+                        <p className="text-sm text-gray-500 mt-1">{isClient ? 'View your order history and status.' : "Welcome back! Here's what's happening with your business."}</p>
                     </div>
-                    <div className="flex items-center gap-4">
-                        {/* Period Selector */}
-                        <div className="flex items-center gap-2 bg-white/50 backdrop-blur-sm rounded-xl p-1 border border-white/40">
-                            <Calendar className="w-4 h-4 text-gray-500 ml-2" />
-                            <select
-                                value={period}
-                                onChange={(e) => handlePeriodChange(e.target.value)}
-                                className="h-9 px-3 pr-8 bg-transparent border-none text-sm font-medium text-gray-700 focus:outline-none cursor-pointer appearance-none"
-                            >
-                                {PERIOD_OPTIONS.map(option => (
-                                    <option key={option.value} value={option.value}>
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </select>
+                    {!isClient && (
+                        <div className="flex items-center gap-4">
+                            {/* Period Selector */}
+                            <div className="flex items-center gap-2 bg-white/50 backdrop-blur-sm rounded-xl p-1 border border-white/40">
+                                <Calendar className="w-4 h-4 text-gray-500 ml-2" />
+                                <select
+                                    value={period}
+                                    onChange={(e) => handlePeriodChange(e.target.value)}
+                                    className="h-9 px-3 pr-8 bg-transparent border-none text-sm font-medium text-gray-700 focus:outline-none cursor-pointer appearance-none"
+                                >
+                                    {PERIOD_OPTIONS.map(option => (
+                                        <option key={option.value} value={option.value}>
+                                            {option.label}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="flex items-center gap-2 text-sm">
+                                <span className="text-gray-400">Last updated:</span>
+                                <span className="text-gray-600 font-medium">{new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-2 text-sm">
-                            <span className="text-gray-400">Last updated:</span>
-                            <span className="text-gray-600 font-medium">{new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
-                        </div>
-                    </div>
+                    )}
                 </div>
                 
                 {/* Quick Actions */}
                 <div className="glass-card p-4">
                     <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Quick Actions</h2>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        <QuickAction icon={Plus} label="New Order" href="/orders/create" color="accent" />
-                        <QuickAction icon={UserPlus} label="Add Client" href="/clients" color="emerald" />
-                        <QuickAction icon={Box} label="Add Product" href="/products" color="blue" />
-                        <QuickAction icon={FileText} label="View Reports" href="/reports" color="amber" />
+                    <div className={`grid gap-3 ${isClient ? 'grid-cols-1' : 'grid-cols-2 sm:grid-cols-4'}`}>
+                        {!isClient && <QuickAction icon={Plus} label="New Order" href="/orders/create" color="accent" />}
+                        {!isClient && <QuickAction icon={UserPlus} label="Add Client" href="/clients" color="emerald" />}
+                        {!isClient && <QuickAction icon={Box} label="Add Product" href="/products" color="blue" />}
+                        {!isClient && <QuickAction icon={FileText} label="View Reports" href="/reports" color="amber" />}
                     </div>
                 </div>
 
@@ -306,7 +310,7 @@ export default function Dashboard({ stats, recentOrders, ordersByStatus, monthly
                     <div className="glass-card p-6 group hover:shadow-glass-lg transition-all duration-300 animate-fade-in" style={{ animationDelay: '200ms' }}>
                         <div className="flex items-center justify-between mb-4">
                             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400/20 to-emerald-600/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <DollarSign className="w-6 h-6 text-emerald-600" />
+                                <GhanaCedi className="w-6 h-6 text-emerald-600" />
                             </div>
                             <TrendingUp className="w-5 h-5 text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>

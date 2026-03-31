@@ -25,13 +25,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Users (manager only)
-    Route::resource('users', UserController::class);
+    Route::resource('users', UserController::class)->middleware(['manager']);
 
-    // Products
-    Route::resource('products', ProductController::class)->except(['create']);
+    // Products (manager only)
+    Route::resource('products', ProductController::class)->except(['create'])->middleware(['manager']);
 
-    // Clients
-    Route::resource('clients', ClientController::class)->except(['create']);
+    // Clients (manager only)
+    Route::resource('clients', ClientController::class)->except(['create'])->middleware(['manager']);
 
     // Orders (specific routes before resource to avoid conflict)
     Route::get('/orders/archived', [OrderController::class, 'archived'])->name('orders.archived');

@@ -6,7 +6,8 @@ import { Button } from '@/Components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
-import { FileText, Download, BarChart3, DollarSign, Package, Users, ShoppingCart, X, Eye } from 'lucide-react';
+import { FileText, Download, BarChart3, Package, Users, ShoppingCart, X, Eye } from 'lucide-react';
+import GhanaCedi from '@/Components/GhanaCedi';
 
 interface Props {
     auth: {
@@ -301,7 +302,7 @@ const reportCategories = [
     },
     {
         title: 'Financial Reports',
-        icon: DollarSign,
+        icon: GhanaCedi,
         color: 'text-green-600',
         bgColor: 'bg-green-100',
         reports: [

@@ -31,6 +31,10 @@ class ProductController extends Controller
         $product = Product::create($validated);
         AuditService::logCreate('Product', $product->id, $validated, $request);
 
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'message' => 'Product created successfully', 'product' => $product]);
+        }
+
         return redirect()->route('products.index')->with('success', 'Product created successfully');
     }
 

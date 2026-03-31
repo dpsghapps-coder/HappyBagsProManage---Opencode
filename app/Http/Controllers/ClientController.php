@@ -31,6 +31,10 @@ class ClientController extends Controller
         $client = Client::create($validated);
         AuditService::logCreate('Client', $client->id, $validated, $request);
 
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'message' => 'Client created successfully', 'client' => $client]);
+        }
+
         return redirect()->route('clients.index')->with('success', 'Client created successfully');
     }
 

@@ -11,7 +11,8 @@ import OrderStatusHistory from '@/Components/OrderStatusHistory';
 import PaymentModal from '@/Components/PaymentModal';
 import { EmptyState, LoadingState } from '@/Components/EmptyState';
 import { Skeleton } from '@/Components/ui/skeleton';
-import { FileText, Receipt, Pencil, Trash2, ChevronDown, ChevronRight, Clock, DollarSign, Package, Users, Plus } from 'lucide-react';
+import { FileText, Receipt, Pencil, Trash2, ChevronDown, ChevronRight, Clock, Package, Users, Plus } from 'lucide-react';
+import GhanaCedi from '@/Components/GhanaCedi';
 
 interface Client {
     id: number;
@@ -466,7 +467,7 @@ export default function Index({ orders }: Props) {
                                                         className="p-2 rounded-lg hover:bg-emerald-100 text-emerald-600 transition-colors"
                                                         title="View/Add Payments"
                                                     >
-                                                        <DollarSign className="w-4 h-4" />
+                                                        <GhanaCedi className="w-4 h-4" />
                                                     </button>
                                                     {STATUSES.indexOf(order.status) >= 0 && (
                                                         <button 

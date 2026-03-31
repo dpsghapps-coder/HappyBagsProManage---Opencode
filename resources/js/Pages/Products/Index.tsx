@@ -3,13 +3,12 @@ import { useForm } from '@inertiajs/react';
 import { Head } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
-import { Label } from '@/Components/ui/label';
 import SearchBar from '@/Components/SearchBar';
 import { EmptyState } from '@/Components/EmptyState';
+import Modal from '@/Components/Modal';
 import Swal from 'sweetalert2';
-import { Package, Plus, Pencil, Trash2, Ruler, DollarSign, Info } from 'lucide-react';
+import { Package, Plus, Pencil, Trash2, Ruler, Info } from 'lucide-react';
+import GhanaCedi from '@/Components/GhanaCedi';
 
 interface Product {
     id: number;
@@ -190,7 +189,7 @@ export default function Index({ products }: Props) {
                             <div className="space-y-2 text-sm mb-4">
                                 <div className="flex justify-between items-center">
                                     <span className="text-gray-500 flex items-center gap-2">
-                                        <DollarSign className="w-4 h-4" />
+                                        <GhanaCedi className="w-4 h-4" />
                                         Price
                                     </span>
                                     <span className="font-bold text-lg text-accent-600">GHC {formatPrice(product.unit_price)}</span>
@@ -248,81 +247,147 @@ export default function Index({ products }: Props) {
             </div>
 
             {isModalOpen && (
-                <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="glass-modal-content w-full max-w-md p-6">
-                        <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-xl font-bold text-gray-800">
-                                {editingProduct ? 'Edit Product' : 'Add Product'}
-                            </h2>
-                        </div>
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div>
-                                <Label htmlFor="product_name">Product Name</Label>
-                                <Input
-                                    id="product_name"
+                <Modal show={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingProduct ? 'Edit Product' : 'Add New Product'}>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Product Name *
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <Package className="h-4 w-4 text-gray-400" />
+                                </div>
+                                <input
+                                    type="text"
                                     value={data.product_name}
                                     onChange={(e) => setData('product_name', e.target.value)}
-                                    className="glass-input"
-                                    required
-                                />
-                                {errors.product_name && <p className="text-red-500 text-sm mt-1">{errors.product_name}</p>}
-                            </div>
-                            <div>
-                                <Label htmlFor="unit_price">Unit Price (GHC)</Label>
-                                <Input
-                                    id="unit_price"
-                                    type="number"
-                                    step="0.01"
-                                    value={data.unit_price}
-                                    onChange={(e) => setData('unit_price', e.target.value)}
-                                    className="glass-input"
-                                    required
-                                />
-                                {errors.unit_price && <p className="text-red-500 text-sm mt-1">{errors.unit_price}</p>}
-                            </div>
-                            <div>
-                                <Label htmlFor="category">Category</Label>
-                                <Input
-                                    id="category"
-                                    value={data.category}
-                                    onChange={(e) => setData('category', e.target.value)}
-                                    placeholder="Tote, Box, Paper Bag"
-                                    className="glass-input"
+                                    className="pl-10 block w-full rounded-lg border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                    placeholder="Enter product name"
                                     required
                                 />
                             </div>
+                            {errors.product_name && (
+                                <p className="mt-1 text-sm text-red-600">{errors.product_name}</p>
+                            )}
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <Label htmlFor="dimension">Dimension</Label>
-                                <Input
-                                    id="dimension"
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Unit Price (GHC) *
+                                </label>
+                                <div className="relative">
+                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <GhanaCedi className="h-4 w-4 text-gray-400" />
+                                    </div>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        min="0"
+                                        value={data.unit_price}
+                                        onChange={(e) => setData('unit_price', e.target.value)}
+                                        className="pl-10 block w-full rounded-lg border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                        placeholder="0.00"
+                                        required
+                                    />
+                                </div>
+                                {errors.unit_price && (
+                                    <p className="mt-1 text-sm text-red-600">{errors.unit_price}</p>
+                                )}
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Category *
+                                </label>
+                                <div className="relative">
+                                    <select
+                                        value={data.category}
+                                        onChange={(e) => setData('category', e.target.value)}
+                                        className="block w-full rounded-lg border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                        required
+                                    >
+                                        <option value="">Select category</option>
+                                        <option value="Paper Bag">Paper Bag</option>
+                                        <option value="Plastic Bag">Plastic Bag</option>
+                                        <option value="Non-woven Bag">Non-woven Bag</option>
+                                        <option value="Jute Bag">Jute Bag</option>
+                                        <option value="Canvas Bag">Canvas Bag</option>
+                                        <option value="Reusable Bag">Reusable Bag</option>
+                                        <option value="Custom">Custom</option>
+                                    </select>
+                                </div>
+                                {errors.category && (
+                                    <p className="mt-1 text-sm text-red-600">{errors.category}</p>
+                                )}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Dimension *
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <Ruler className="h-4 w-4 text-gray-400" />
+                                </div>
+                                <input
+                                    type="text"
                                     value={data.dimension}
                                     onChange={(e) => setData('dimension', e.target.value)}
-                                    placeholder="L x B x H"
-                                    className="glass-input"
+                                    className="pl-10 block w-full rounded-lg border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                    placeholder="e.g., 10 x 15 inches"
                                     required
                                 />
                             </div>
-                            <div>
-                                <Label htmlFor="other_details">Other Details</Label>
-                                <Input
-                                    id="other_details"
+                            {errors.dimension && (
+                                <p className="mt-1 text-sm text-red-600">{errors.dimension}</p>
+                            )}
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Other Details
+                            </label>
+                            <div className="relative">
+                                <div className="absolute top-3 left-3 pointer-events-none">
+                                    <Info className="h-4 w-4 text-gray-400" />
+                                </div>
+                                <textarea
                                     value={data.other_details}
                                     onChange={(e) => setData('other_details', e.target.value)}
-                                    placeholder="Handle type, material, etc."
-                                    className="glass-input"
+                                    rows={2}
+                                    className="pl-10 block w-full rounded-lg border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none"
+                                    placeholder="Additional product details (optional)"
                                 />
                             </div>
-                            <div className="flex gap-3 pt-4">
-                                <Button type="button" variant="ghost" onClick={() => setIsModalOpen(false)} className="flex-1">
-                                    Cancel
-                                </Button>
-                                <Button type="submit" disabled={processing} className="flex-1">
-                                    {editingProduct ? 'Update' : 'Create'}
-                                </Button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                        </div>
+
+                        <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+                            <button
+                                type="button"
+                                onClick={() => setIsModalOpen(false)}
+                                className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors font-medium"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                disabled={processing}
+                                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium disabled:opacity-50 flex items-center gap-2"
+                            >
+                                {processing ? (
+                                    <>
+                                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                        {editingProduct ? 'Updating...' : 'Creating...'}
+                                    </>
+                                ) : (
+                                    editingProduct ? 'Update Product' : 'Create Product'
+                                )}
+                            </button>
+                        </div>
+                    </form>
+                </Modal>
             )}
         </AuthenticatedLayout>
     );

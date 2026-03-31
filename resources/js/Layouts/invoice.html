@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#000000",
+                        "secondary": "#5a5f66",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f4f3f6",
+                        "on-surface": "#1a1c1e",
+                        "on-surface-variant": "#474747",
+                        "outline-variant": "#c6c6c6",
+                        "error": "#ba1a1a",
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #faf9fc;
+            color: #1a1c1e;
+        }
+
+        .diagonal-accent {
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
+        }
+
+        [contenteditable]:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        [contenteditable]:focus {
+            background-color: rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+            outline: 2px solid #000;
+            padding: 2px;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            main {
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+            }
+
+            .shadow-custom {
+                shadow: none !important;
+                box-shadow: none !important;
+            }
+
+            body {
+                background-color: white;
+            }
+
+            .diagonal-accent {
+                -webkit-print-color-adjust: exact;
+            }
+        }
+
+        .shadow-custom {
+            box-shadow: 0px 12px 32px rgba(26, 28, 30, 0.06);
+        }
+
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+
+<body class="bg-[#faf9fc] text-on-surface">
+    <main class="pt-12 pb-20 px-4 md:px-20 max-w-7xl mx-auto" id="invoice-app">
+        <!-- Document Canvas -->
+        <div class="bg-surface-container-lowest shadow-custom rounded-lg overflow-hidden flex flex-col min-h-[1100px]">
+
+            <!-- Hero Header Section -->
+            <div class="relative bg-primary diagonal-accent p-10 md:p-16 text-white">
+                <div class="flex flex-col md:flex-row justify-between items-start relative z-10 gap-6">
+                    <div>
+                        <h1 contenteditable="true"
+                            class="font-headline font-black text-5xl md:text-6xl tracking-tighter uppercase mb-2">
+                            INVOICE</h1>
+                        <p contenteditable="true" class="font-label text-sm uppercase tracking-widest opacity-70">
+                            Transaction Record</p>
+                    </div>
+                    <div class="text-left md:text-right">
+                        <div contenteditable="true" class="text-3xl font-black font-headline tracking-tighter mb-4">
+                            Happy Bags</div>
+                        <div contenteditable="true"
+                            class="text-xs font-label uppercase tracking-tighter opacity-80 leading-relaxed">
+                            128 Editorial Way<br />
+                            Studio District<br />
+                            Accra, Ghana
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black opacity-90 pointer-events-none">
+                </div>
+            </div>
+
+            <!-- Meta Information Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 p-10 md:p-16">
+                <!-- Recipient Info -->
+                <div class="md:col-span-7">
+                    <h2 class="font-label text-[0.6875rem] uppercase tracking-widest text-secondary mb-4">Invoice To
+                    </h2>
+                    <div class="space-y-1">
+                        <p contenteditable="true" class="font-headline font-extrabold text-xl">Luxe Retail Collective
+                        </p>
+                        <p contenteditable="true"
+                            class="text-on-surface-variant font-body text-sm leading-relaxed max-w-xs">
+                            452 Boutique Avenue, Suite 12<br />
+                            Creative Quarter, Paris<br />
+                            75001, France
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Transaction Details -->
+                <div class="md:col-span-5 flex flex-col gap-6 text-right">
+                    <div class="bg-surface-container-low p-6 rounded-lg space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="font-label text-[0.6875rem] uppercase tracking-widest text-secondary">Invoice
+                                Number</span>
+                            <span contenteditable="true"
+                                class="font-headline font-bold text-primary">INV-2024-0892</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="font-label text-[0.6875rem] uppercase tracking-widest text-secondary">Issue
+                                Date</span>
+                            <span contenteditable="true" class="font-body font-semibold">Oct 24, 2024</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="font-label text-[0.6875rem] uppercase tracking-widest text-secondary">Account
+                                Number</span>
+                            <span contenteditable="true" class="font-body font-semibold">HB-LX-4410</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Line Items Table -->
+            <div class="px-6 md:px-16 flex-grow overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-[600px]">
+                    <thead>
+                        <tr class="bg-primary text-white">
+                            <th
+                                class="py-4 px-6 font-headline font-bold text-[0.6875rem] uppercase tracking-widest rounded-l-md w-12">
+                                No.</th>
+                            <th class="py-4 px-6 font-headline font-bold text-[0.6875rem] uppercase tracking-widest">
+                                Description</th>
+                            <th
+                                class="py-4 px-6 font-headline font-bold text-[0.6875rem] uppercase tracking-widest text-center">
+                                Qty</th>
+                            <th
+                                class="py-4 px-6 font-headline font-bold text-[0.6875rem] uppercase tracking-widest text-right">
+                                Unit Price</th>
+                            <th
+                                class="py-4 px-6 font-headline font-bold text-[0.6875rem] uppercase tracking-widest text-right rounded-r-md">
+                                Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="line-items" class="divide-y divide-outline-variant/15">
+                        <!-- Rows added via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Summary Section -->
+            <div class="p-10 md:p-16 flex justify-end">
+                <div class="w-full max-w-sm space-y-4">
+                    <div class="flex justify-between items-center py-2 border-b border-outline-variant/15">
+                        <span class="font-label text-xs uppercase tracking-widest text-secondary">Subtotal</span>
+                        <span id="subtotal" class="font-body font-semibold">GHC 0.00</span>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-outline-variant/15">
+                        <span class="font-label text-xs uppercase tracking-widest text-secondary">VAT (20%)</span>
+                        <span id="tax" class="font-body font-semibold">GHC 0.00</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-4">
+                        <span class="font-headline font-black text-xl uppercase tracking-tighter">Total Amount</span>
+                        <span id="total" class="font-headline font-black text-3xl tracking-tighter">GHC 0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Methods & Terms -->
+            <div class="px-10 md:px-16 pb-16 mt-auto">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
+                    <div class="md:col-span-8">
+                        <h3 class="font-label text-[0.6875rem] uppercase tracking-widest text-secondary mb-4">Payment
+                            Methods</h3>
+                        <div class="flex flex-wrap gap-4">
+                            <div class="bg-surface-container-low p-4 rounded-md flex items-center gap-3">
+                                <span class="material-symbols-outlined text-primary">account_balance</span>
+                                <div>
+                                    <p contenteditable="true"
+                                        class="text-[10px] uppercase font-bold tracking-widest text-secondary">Bank
+                                        Transfer</p>
+                                    <p contenteditable="true" class="text-xs font-semibold">GH-HB-00-221-44</p>
+                                </div>
+                            </div>
+                            <div class="bg-surface-container-low p-4 rounded-md flex items-center gap-3">
+                                <span class="material-symbols-outlined text-primary">credit_card</span>
+                                <div>
+                                    <p contenteditable="true"
+                                        class="text-[10px] uppercase font-bold tracking-widest text-secondary">Secure
+                                        Portal</p>
+                                    <p contenteditable="true" class="text-xs font-semibold">pay.happybags.gh/INV-0892
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:col-span-4 text-left md:text-right">
+                        <div class="h-16 flex items-end justify-start md:justify-end mb-2">
+                            <img alt="Signature" class="max-h-full mix-blend-multiply opacity-80"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuChcwoq1CivXZTm0ZX2W0Mz5wByID1CIs0pA1ykHzVsDevpZE70eCZeNBFWd3RADHgJzIrxiXljp4Mfl-BhOtyIvFpJTkzPPAZ_iuGl4R8GBk7dKBr2B22B4p8chxzGv3U8wuHM9ZitMxNkGN7bYGP-mc37l3pLwT_H5CMtRUoUWwsY_vyFhsoG-Zn5MrLKnnAYj2mC9EQs5Z2Qt6qTPzuyLjDaGBaicJdREbYOq7hYpxDTbQluXN2Mx94q6JjFsD9I8S7VcBib6p7q" />
+                        </div>
+                        <p contenteditable="true"
+                            class="font-label text-[0.6875rem] uppercase tracking-widest text-secondary">Authorized
+                            Signature</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer
+        class="no-print bg-white border-t border-outline-variant/15 py-12 px-20 flex flex-col md:flex-row justify-between items-center w-full">
+        <p class="font-label text-[0.6875rem] uppercase tracking-widest text-secondary">
+            © 2024 Happy Bags Ghana. All rights reserved.
+        </p>
+        <div class="flex gap-8 mt-6 md:mt-0">
+            <span
+                class="font-label text-[0.6875rem] uppercase tracking-widest text-secondary cursor-pointer hover:text-primary">Terms</span>
+            <span
+                class="font-label text-[0.6875rem] uppercase tracking-widest text-secondary cursor-pointer hover:text-primary">Privacy</span>
+            <span
+                class="font-label text-[0.6875rem] uppercase tracking-widest text-secondary cursor-pointer hover:text-primary">Contact</span>
+        </div>
+    </footer>
+
+    <script>
+        let items = [
+            { id: 1, desc: 'Bespoke Editorial Packaging Design', sub: 'Full brand audit and custom template creation.', qty: 1, price: 2450.00 },
+            { id: 2, desc: 'Premium Matte Carry-Alls (Medium)', sub: 'Eco-certified recycled materials.', qty: 500, price: 4.25 },
+            { id: 3, desc: 'Logistics & Express Fulfillment', sub: 'Direct-to-warehouse delivery.', qty: 1, price: 350.00 }
+        ];
+
+        function formatCurrency(num) {
+            return 'GHC ' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function calculate() {
+            let subtotal = 0;
+            const tbody = document.getElementById('line-items');
+            tbody.innerHTML = '';
+
+            items.forEach((item, index) => {
+                const amount = item.qty * item.price;
+                subtotal += amount;
+
+                const tr = document.createElement('tr');
+                tr.className = index % 2 === 1 ? 'bg-surface-container-low' : '';
+                tr.innerHTML = `
+                    <td class="py-6 px-6 font-body text-sm text-secondary">${index + 1}</td>
+                    <td class="py-6 px-6">
+                        <p contenteditable="true" onblur="updateItem(${index}, 'desc', this.innerText)" class="font-headline font-bold text-sm">${item.desc}</p>
+                        <p contenteditable="true" onblur="updateItem(${index}, 'sub', this.innerText)" class="text-xs text-secondary mt-1">${item.sub}</p>
+                    </td>
+                    <td class="py-6 px-6 text-center">
+                        <input type="number" value="${item.qty}" onchange="updateItem(${index}, 'qty', this.value)" class="w-16 text-center bg-transparent border-none font-body text-sm focus:ring-0 appearance-none">
+                    </td>
+                    <td class="py-6 px-6 text-right">
+                        <div class="flex items-center justify-end gap-1">
+                            <span class="text-xs text-secondary">GHC</span>
+                            <input type="number" step="0.01" value="${item.price}" onchange="updateItem(${index}, 'price', this.value)" class="w-24 text-right bg-transparent border-none font-body text-sm focus:ring-0">
+                        </div>
+                    </td>
+                    <td class="py-6 px-6 text-right font-headline font-bold text-sm">
+                        ${formatCurrency(amount)}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            const tax = subtotal * 0.20;
+            const total = subtotal + tax;
+
+            document.getElementById('subtotal').innerText = formatCurrency(subtotal);
+            document.getElementById('tax').innerText = formatCurrency(tax);
+            document.getElementById('total').innerText = formatCurrency(total);
+        }
+
+        function updateItem(index, field, value) {
+            if (field === 'qty' || field === 'price') {
+                items[index][field] = parseFloat(value) || 0;
+            } else {
+                items[index][field] = value;
+            }
+            calculate();
+        }
+
+        window.onload = calculate;
+    </script>
+</body>
+
+</html>
