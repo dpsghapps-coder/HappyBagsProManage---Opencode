@@ -325,18 +325,18 @@ export default function Create({ clients, products }: Props) {
                                             })}
                                         </select>
                                         
-                                        <div className="grid grid-cols-2 gap-3">
-                                            <div>
+                                        <div className="grid grid-cols-5 gap-2">
+                                            <div className="col-span-1">
                                                 <label className="text-xs font-medium text-gray-500 block mb-1">Qty</label>
                                                 <Input
                                                     type="number"
                                                     min="1"
                                                     value={item.qty}
                                                     onChange={(e) => updateItem(index, 'qty', parseInt(e.target.value) || 1)}
-                                                    className="h-12"
+                                                    className="h-12 text-center"
                                                 />
                                             </div>
-                                            <div>
+                                            <div className="col-span-4">
                                                 <label className="text-xs font-medium text-gray-500 block mb-1">Discount</label>
                                                 <div className="flex items-center gap-1 h-12">
                                                     <Input

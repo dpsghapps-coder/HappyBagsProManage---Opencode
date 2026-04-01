@@ -26,7 +26,23 @@ class UserController extends Controller
     {
         $this->authorizeManagerAccess($request);
         
-        $users = User::with('client')->orderBy('created_at', 'desc')->get()->map(function ($user) {
+        $search = $request->get('search');
+        
+        $query = User::with('client');
+        
+        if ($search) {
+            $searchTerm = '%' . $search . '%';
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('name', 'like', $searchTerm)
+                  ->orWhere('email', 'like', $searchTerm)
+                  ->orWhere('role', 'like', $searchTerm)
+                  ->orWhereHas('client', function ($cq) use ($searchTerm) {
+                      $cq->where('client_name', 'like', $searchTerm);
+                  });
+            });
+        }
+        
+        $users = $query->orderBy('created_at', 'desc')->get()->map(function ($user) {
             return [
                 'id' => $user->id,
                 'name' => $user->name,

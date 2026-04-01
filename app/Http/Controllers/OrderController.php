@@ -54,6 +54,8 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
+        $search = $request->get('search');
+        $page = (int) $request->get('page', 1);
         
         $query = Order::with('client');
         
@@ -61,7 +63,20 @@ class OrderController extends Controller
             $query->where('client_id', $user->client_id);
         }
         
-        $orders = $query->orderBy('created_at', 'desc')->get()->map(function ($order) {
+        if ($search) {
+            $searchTerm = '%' . $search . '%';
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('order_id', 'like', $searchTerm)
+                  ->orWhere('status', 'like', $searchTerm)
+                  ->orWhereHas('client', function ($cq) use ($searchTerm) {
+                      $cq->where('client_name', 'like', $searchTerm);
+                  });
+            });
+        }
+        
+        $paginatedOrders = $query->orderBy('created_at', 'desc')->paginate(25, ['*'], 'page', $page);
+        
+        $orders = collect($paginatedOrders->items())->map(function ($order) {
             $items = is_array($order->items) ? $order->items : json_decode($order->items, true);
             
             $items = array_map(function ($item) {
@@ -104,6 +119,12 @@ class OrderController extends Controller
         
         return Inertia::render('Orders/Index', [
             'orders' => $orders,
+            'pagination' => [
+                'current_page' => $paginatedOrders->currentPage(),
+                'last_page' => $paginatedOrders->lastPage(),
+                'per_page' => $paginatedOrders->perPage(),
+                'total' => $paginatedOrders->total(),
+            ],
         ]);
     }
 
@@ -609,5 +630,90 @@ class OrderController extends Controller
             'vatAmount' => $vatAmount,
             'vatPercentage' => $vatPercentage,
         ]);
+    }
+
+    public function downloadInvoice(Order $order)
+    {
+        $order->load('client');
+        
+        $issueDate = $order->created_at ? $order->created_at->format('F j, Y') : now()->format('F j, Y');
+        
+        $vatAmount = 0;
+        $vatPercentage = 0;
+        if ($order->is_vat) {
+            $vatPercentage = 20;
+            $vatAmount = $order->total - $order->subtotal;
+        }
+        
+        $pdf = \PDF::loadView('pdf.invoice', [
+            'order' => $order,
+            'issueDate' => $issueDate,
+            'documentType' => 'Invoice',
+            'vatAmount' => $vatAmount,
+            'vatPercentage' => $vatPercentage,
+        ]);
+        
+        return $pdf->download("Invoice_{$order->order_id}.pdf");
+    }
+
+    public function downloadProforma(Order $order)
+    {
+        $order->load('client');
+        
+        $issueDate = $order->created_at ? $order->created_at->format('F j, Y') : now()->format('F j, Y');
+        
+        $vatAmount = 0;
+        $vatPercentage = 0;
+        if ($order->is_vat) {
+            $vatPercentage = 20;
+            $vatAmount = $order->total - $order->subtotal;
+        }
+        
+        $pdf = \PDF::loadView('pdf.estimate', [
+            'order' => $order,
+            'issueDate' => $issueDate,
+            'documentType' => 'Proforma',
+            'vatAmount' => $vatAmount,
+            'vatPercentage' => $vatPercentage,
+        ]);
+        
+        return $pdf->download("Proforma_{$order->order_id}.pdf");
+    }
+
+    public function downloadEstimate(Order $order)
+    {
+        $order->load('client');
+        
+        $issueDate = $order->created_at ? $order->created_at->format('F j, Y') : now()->format('F j, Y');
+        
+        $vatAmount = 0;
+        $vatPercentage = 0;
+        if ($order->is_vat) {
+            $vatPercentage = 20;
+            $vatAmount = $order->total - $order->subtotal;
+        }
+        
+        $pdf = \PDF::loadView('pdf.estimate', [
+            'order' => $order,
+            'issueDate' => $issueDate,
+            'documentType' => 'Estimate',
+            'vatAmount' => $vatAmount,
+            'vatPercentage' => $vatPercentage,
+        ]);
+        
+        return $pdf->download("Estimate_{$order->order_id}.pdf");
+    }
+
+    public function downloadReceipt(Request $request, Order $order)
+    {
+        $order->load('client');
+        $amountPaid = $request->input('amount_paid', $order->total);
+        
+        $pdf = \PDF::loadView('pdf.receipt', [
+            'order' => $order,
+            'amountPaid' => $amountPaid,
+        ]);
+        
+        return $pdf->download("Receipt_{$order->order_id}.pdf");
     }
 }

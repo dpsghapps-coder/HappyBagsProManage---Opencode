@@ -28,6 +28,7 @@ interface Order {
 
 declare const route: (name: string, params?: any) => string;
 
+// Preview functions (opens print dialog)
 export function generateInvoice(order: Order): void {
     const previewWindow = window.open(route('orders.preview-invoice', order.id), '_blank');
     if (previewWindow) {

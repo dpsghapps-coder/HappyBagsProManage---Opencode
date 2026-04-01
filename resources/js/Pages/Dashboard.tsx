@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import { router } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, Area, AreaChart } from 'recharts';
 import GlassmorphicChartCard from '@/Components/GlassmorphicChartCard';
@@ -11,6 +11,8 @@ import { CHART_COLORS } from '@/config/chartColors';
 import { FileText, Clock, Users, Package, TrendingUp, ArrowRight, Plus, ShoppingCart, UserPlus, Box, Calendar } from 'lucide-react';
 import GhanaCedi from '@/Components/GhanaCedi';
 import { Link } from '@inertiajs/react';
+import AddClientModal from '@/Components/AddClientModal';
+import AddProductModal from '@/Components/AddProductModal';
 
 function useWindowSize() {
     const [size, setSize] = useState({ width: window.innerWidth, height: window.innerHeight });
@@ -172,12 +174,14 @@ const QuickAction = ({
     icon: Icon, 
     label, 
     href, 
-    color = 'accent' 
+    color = 'accent',
+    onClick 
 }: { 
     icon: React.ElementType; 
     label: string; 
-    href: string; 
+    href?: string; 
     color?: 'accent' | 'emerald' | 'blue' | 'amber';
+    onClick?: () => void;
 }) => {
     const colors = {
         accent: 'from-accent-500 to-accent-600 shadow-accent-500/25 hover:shadow-accent-500/40',
@@ -186,16 +190,33 @@ const QuickAction = ({
         amber: 'from-amber-500 to-amber-600 shadow-amber-500/25 hover:shadow-amber-500/40',
     };
 
+    const buttonClass = `
+        flex flex-col items-center justify-center gap-2 p-4 rounded-xl
+        bg-gradient-to-br ${colors[color]}
+        text-white shadow-lg ${colors[color].split(' ').slice(-1)[0]}
+        transition-all duration-300 hover:scale-105 hover:-translate-y-1
+        active:scale-95 cursor-pointer w-full h-full
+    `;
+
+    if (onClick) {
+        return (
+            <button
+                type="button"
+                onClick={onClick}
+                className={buttonClass}
+            >
+                <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                    <Icon className="w-6 h-6" />
+                </div>
+                <span className="text-sm font-medium text-center">{label}</span>
+            </button>
+        );
+    }
+
     return (
         <Link
-            href={href}
-            className={`
-                flex flex-col items-center justify-center gap-2 p-4 rounded-xl
-                bg-gradient-to-br ${colors[color]}
-                text-white shadow-lg ${colors[color].split(' ').slice(-1)[0]}
-                transition-all duration-300 hover:scale-105 hover:-translate-y-1
-                active:scale-95
-            `}
+            href={href || '#'}
+            className={buttonClass}
         >
             <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
                 <Icon className="w-6 h-6" />
@@ -214,10 +235,20 @@ const PERIOD_OPTIONS = [
 
 export default function Dashboard({ stats, recentOrders, ordersByStatus, monthlySales, categoryRevenue, selectedPeriod, isClient = false }: Props) {
     const [period, setPeriod] = useState(selectedPeriod);
+    const [showAddClientModal, setShowAddClientModal] = useState(false);
+    const [showAddProductModal, setShowAddProductModal] = useState(false);
 
     const handlePeriodChange = (newPeriod: string) => {
         setPeriod(newPeriod);
         router.get('/dashboard', { period: newPeriod }, { preserveState: true });
+    };
+
+    const handleClientSuccess = () => {
+        router.reload({ only: ['stats', 'recentOrders'] });
+    };
+
+    const handleProductSuccess = () => {
+        router.reload({ only: ['stats', 'recentOrders'] });
     };
 
     const pieData = ordersByStatus.map(item => ({
@@ -272,8 +303,8 @@ export default function Dashboard({ stats, recentOrders, ordersByStatus, monthly
                     <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Quick Actions</h2>
                     <div className={`grid gap-3 ${isClient ? 'grid-cols-1' : 'grid-cols-2 sm:grid-cols-4'}`}>
                         {!isClient && <QuickAction icon={Plus} label="New Order" href="/orders/create" color="accent" />}
-                        {!isClient && <QuickAction icon={UserPlus} label="Add Client" href="/clients" color="emerald" />}
-                        {!isClient && <QuickAction icon={Box} label="Add Product" href="/products" color="blue" />}
+                        {!isClient && <QuickAction icon={UserPlus} label="Add Client" onClick={() => setShowAddClientModal(true)} color="emerald" />}
+                        {!isClient && <QuickAction icon={Box} label="Add Product" onClick={() => setShowAddProductModal(true)} color="blue" />}
                         {!isClient && <QuickAction icon={FileText} label="View Reports" href="/reports" color="amber" />}
                     </div>
                 </div>
@@ -558,6 +589,18 @@ export default function Dashboard({ stats, recentOrders, ordersByStatus, monthly
                     )}
                 </GlassmorphicChartCard>
             </div>
+
+            <AddClientModal
+                show={showAddClientModal}
+                onClose={() => setShowAddClientModal(false)}
+                onSuccess={handleClientSuccess}
+            />
+
+            <AddProductModal
+                show={showAddProductModal}
+                onClose={() => setShowAddProductModal(false)}
+                onSuccess={handleProductSuccess}
+            />
         </AuthenticatedLayout>
     );
 }

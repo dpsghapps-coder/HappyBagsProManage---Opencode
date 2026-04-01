@@ -10,9 +10,24 @@ use Inertia\Inertia;
 
 class ClientController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $clients = Client::orderBy('created_at', 'desc')->get();
+        $search = $request->get('search');
+        
+        $query = Client::query();
+        
+        if ($search) {
+            $searchTerm = '%' . $search . '%';
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('client_name', 'like', $searchTerm)
+                  ->orWhere('email', 'like', $searchTerm)
+                  ->orWhere('mobile_no1', 'like', $searchTerm)
+                  ->orWhere('mobile_no2', 'like', $searchTerm)
+                  ->orWhere('delivery_address', 'like', $searchTerm);
+            });
+        }
+        
+        $clients = $query->orderBy('created_at', 'desc')->get();
         return Inertia::render('Clients/Index', [
             'clients' => $clients,
         ]);

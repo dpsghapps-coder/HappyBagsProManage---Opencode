@@ -1,4 +1,4 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Link, usePage, router } from '@inertiajs/react';
 import { PropsWithChildren, useState, useRef, useEffect, useCallback } from 'react';
 import {
     LayoutDashboard,
@@ -22,9 +22,11 @@ import {
     Keyboard,
     Archive,
     Shield,
+    Database,
 } from 'lucide-react';
 import AddClientModal from '@/Components/AddClientModal';
 import AddProductModal from '@/Components/AddProductModal';
+import FlashNotifications from '@/Components/FlashNotifications';
 
 interface NavItem {
     name: string;
@@ -78,6 +80,7 @@ export default function Authenticated({
     const user = usePage().props.auth?.user ?? null;
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [notificationOpen, setNotificationOpen] = useState(false);
     const [fabOpen, setFabOpen] = useState(false);
     const [globalSearch, setGlobalSearch] = useState('');
     const [showShortcutsHelp, setShowShortcutsHelp] = useState(false);
@@ -85,6 +88,7 @@ export default function Authenticated({
     const [showAddProductModal, setShowAddProductModal] = useState(false);
     const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
     const searchInputRef = useRef<HTMLInputElement>(null);
+    const notificationRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         let timeoutId: NodeJS.Timeout;
@@ -110,6 +114,7 @@ export default function Authenticated({
         if (event.key === 'Escape') {
             setFabOpen(false);
             setMobileMenuOpen(false);
+            setNotificationOpen(false);
             setShowShortcutsHelp(false);
             setShowAddClientModal(false);
             setShowAddProductModal(false);
@@ -151,12 +156,29 @@ export default function Authenticated({
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [handleKeyDown]);
 
-    const isActive = (pattern: string) => {
-        const currentUrl = window.location.pathname;
-        if (pattern === 'dashboard') {
-            return currentUrl === '/dashboard';
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
+                setNotificationOpen(false);
+            }
+        };
+        
+        if (notificationOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
         }
-        return currentUrl.startsWith(pattern.replace('*', ''));
+        
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [notificationOpen]);
+
+    const isActive = (pattern: string) => {
+        const currentPath = window.location.pathname;
+        if (pattern === '/dashboard') {
+            return currentPath === '/dashboard';
+        }
+        const basePath = pattern.replace('*', '');
+        return currentPath === basePath || currentPath.startsWith(basePath + '/');
     };
 
     const userRole = user?.role ?? 'sales_rep';
@@ -218,6 +240,12 @@ export default function Authenticated({
                     icon: <UserCircle size={20} />,
                     active: isActive('users'),
                 },
+                {
+                    name: 'Backup',
+                    href: '/backup',
+                    icon: <Database size={20} />,
+                    active: isActive('backup'),
+                },
             ] : []),
             {
                 name: 'Profile',
@@ -269,7 +297,7 @@ export default function Authenticated({
     const handleGlobalSearch = (e: React.FormEvent) => {
         e.preventDefault();
         if (globalSearch.trim()) {
-            window.location.href = `/orders?search=${encodeURIComponent(globalSearch)}`;
+            router.get('/orders', { search: globalSearch }, { preserveState: true });
         }
     };
 
@@ -361,6 +389,24 @@ export default function Authenticated({
 
                 {/* User Section */}
                 <div className="p-3 border-t border-white/10 space-y-2">
+                    <button
+                        onClick={() => setNotificationOpen(!notificationOpen)}
+                        className={`sidebar-item w-full ${sidebarCollapsed ? 'sidebar-item-collapsed justify-center' : ''}`}
+                        title={sidebarCollapsed ? 'Notifications' : undefined}
+                    >
+                        <div className="sidebar-icon-bg relative">
+                            <Bell size={20} />
+                            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </div>
+                        {!sidebarCollapsed && <span>Notifications</span>}
+                    </button>
+                    
+                    {notificationOpen && !sidebarCollapsed && (
+                        <div className="ml-2 mr-2 p-3 bg-white/10 rounded-xl border border-white/10">
+                            <p className="text-white text-xs text-center">No new notifications</p>
+                        </div>
+                    )}
+                    
                     <Link
                         href={route('profile.edit')}
                         className={`sidebar-user-card ${sidebarCollapsed ? 'sidebar-item-collapsed justify-center' : ''}`}
@@ -403,13 +449,31 @@ export default function Authenticated({
                         <span className="text-gray-800 font-bold">Happy Bags</span>
                     </Link>
                     <div className="flex items-center gap-2">
-                        <button className="p-2 rounded-xl hover:bg-white/20 transition-colors relative">
-                            <Bell size={20} className="text-gray-600" />
-                            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                        </button>
+                        <div ref={notificationRef} className="relative">
+                            <button 
+                                onClick={() => setNotificationOpen(!notificationOpen)}
+                                className="p-2 rounded-xl hover:bg-white/20 transition-colors relative active:bg-white/30"
+                            >
+                                <Bell size={20} className="text-gray-600" />
+                                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                            </button>
+                            
+                            {notificationOpen && (
+                                <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-[60] animate-scale-in">
+                                    <div className="px-4 py-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-white">
+                                        <p className="font-semibold">Notifications</p>
+                                        <p className="text-xs text-white/80">No new notifications</p>
+                                    </div>
+                                    <div className="p-4 text-center text-gray-500">
+                                        <Bell className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                                        <p className="text-sm">You're all caught up!</p>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                         <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="p-2 rounded-xl hover:bg-white/20 transition-colors"
+                            className="p-2 rounded-xl hover:bg-white/20 transition-colors active:bg-white/30"
                         >
                             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                         </button>
@@ -709,6 +773,8 @@ export default function Authenticated({
                 onClose={() => setShowAddProductModal(false)}
                 onSuccess={() => {}}
             />
+
+            <FlashNotifications />
         </div>
     );
 }

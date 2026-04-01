@@ -50,8 +50,16 @@ interface Order {
     created_at: string;
 }
 
+interface Pagination {
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+}
+
 interface Props {
     orders: Order[];
+    pagination?: Pagination;
 }
 
 const SkeletonTableRow = () => (
@@ -110,6 +118,15 @@ const STATUS_COLORS: Record<string, string> = {
     'Order Completed': 'bg-emerald-100 text-emerald-800',
 };
 
+const STATUS_BORDER_COLORS: Record<string, string> = {
+    'Estimate Offered': 'border-l-gray-400',
+    'Invoice Created': 'border-l-blue-500',
+    'Payment Received': 'border-l-green-500',
+    'Production Started': 'border-l-yellow-500',
+    'Order Delivered': 'border-l-purple-500',
+    'Order Completed': 'border-l-emerald-500',
+};
+
 const STATUS_ACTIONS: Record<string, { label: string; documents: string[] }> = {
     'Estimate Offered': { label: 'Create Invoice', documents: ['Estimate'] },
     'Invoice Created': { label: 'Add Payment', documents: ['Estimate', 'Invoice'] },
@@ -138,12 +155,13 @@ const formatDate = (dateStr: string | null): string => {
     return `${days[date.getDay()]}, ${day}${suffix} ${months[date.getMonth()]} ${date.getFullYear()}`;
 };
 
-export default function Index({ orders }: Props) {
+export default function Index({ orders, pagination }: Props) {
     const [expandedOrders, setExpandedOrders] = useState<Set<number>>(new Set());
     const [mobileExpandedItems, setMobileExpandedItems] = useState<Set<number>>(new Set());
     const [searchQuery, setSearchQuery] = useState('');
     const [activeTab, setActiveTab] = useState<'active' | 'all' | 'completed'>('active');
     const [statusFilter, setStatusFilter] = useState<string>('');
+    const [currentPage, setCurrentPage] = useState(pagination?.current_page || 1);
     const [historyModalOpen, setHistoryModalOpen] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [paymentModalOpen, setPaymentModalOpen] = useState(false);
@@ -171,24 +189,45 @@ export default function Index({ orders }: Props) {
         const urlParams = new URLSearchParams(window.location.search);
         const tab = urlParams.get('tab');
         const status = urlParams.get('status');
+        const search = urlParams.get('search');
+        const page = urlParams.get('page');
         if (tab && ['active', 'all', 'completed'].includes(tab)) {
             setActiveTab(tab as 'active' | 'all' | 'completed');
         }
         if (status) {
             setStatusFilter(status);
         }
+        if (search) {
+            setSearchQuery(search);
+        }
+        if (page) {
+            setCurrentPage(parseInt(page) || 1);
+        }
     }, []);
 
     useEffect(() => {
         const url = new URL(window.location.href);
         url.searchParams.set('tab', activeTab);
+        url.searchParams.set('page', currentPage.toString());
         if (statusFilter) {
             url.searchParams.set('status', statusFilter);
         } else {
             url.searchParams.delete('status');
         }
+        if (searchQuery) {
+            url.searchParams.set('search', searchQuery);
+        } else {
+            url.searchParams.delete('search');
+        }
         window.history.pushState({}, '', url.toString());
-    }, [activeTab, statusFilter]);
+    }, [activeTab, statusFilter, searchQuery, currentPage]);
+
+    const handlePageChange = (newPage: number) => {
+        if (newPage >= 1 && newPage <= (pagination?.last_page || 1)) {
+            setCurrentPage(newPage);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
 
     // Status filter options based on tab
     const statusFilterOptions = activeTab === 'all' ? ALL_STATUSES_FILTER : ['All', ...ACTIVE_STATUSES];
@@ -561,7 +600,7 @@ export default function Index({ orders }: Props) {
                 {/* Mobile Card View */}
                 <div className="lg:hidden space-y-4">
                     {filteredOrders.map((order) => (
-                        <div key={order.id} className="glass-card-hover p-4 space-y-4">
+                        <div key={order.id} className={`glass-card-hover p-4 space-y-4 border-l-4 ${STATUS_BORDER_COLORS[order.status] || 'border-l-gray-300'}`}>
                             {/* Header */}
                             <div className="flex items-center justify-between">
                                 <div>
@@ -626,6 +665,18 @@ export default function Index({ orders }: Props) {
 
                             {/* Actions */}
                             <div className="flex flex-wrap gap-2 pt-2 border-t border-white/10">
+                                <Button 
+                                    variant="outline" 
+                                    size="sm" 
+                                    className="border-emerald-300/50 text-emerald-600 hover:bg-emerald-50"
+                                    onClick={() => {
+                                        setSelectedOrderForPayment(order);
+                                        setPaymentModalOpen(true);
+                                    }}
+                                >
+                                    <GhanaCedi className="w-4 h-4 mr-1" />
+                                    Payment
+                                </Button>
                                 {STATUSES.indexOf(order.status) >= 0 && (
                                     <Button 
                                         variant="outline" 
@@ -633,6 +684,7 @@ export default function Index({ orders }: Props) {
                                         className="border-amber-300/50 text-amber-600 hover:bg-amber-50"
                                         onClick={() => generateProforma(order as any)}
                                     >
+                                        <FileText className="w-4 h-4 mr-1" />
                                         Proforma
                                     </Button>
                                 )}
@@ -643,6 +695,7 @@ export default function Index({ orders }: Props) {
                                         className="border-blue-300/50 text-blue-600 hover:bg-blue-50"
                                         onClick={() => generateInvoice(order as any)}
                                     >
+                                        <FileText className="w-4 h-4 mr-1" />
                                         Invoice
                                     </Button>
                                 )}
@@ -651,8 +704,9 @@ export default function Index({ orders }: Props) {
                                         variant="outline" 
                                         size="sm" 
                                         className="border-emerald-300/50 text-emerald-600 hover:bg-emerald-50"
-                                        onClick={() => generateReceipt(order as any, order.total)}
+                                        onClick={() => generateReceipt(order as any, order.total_paid || order.total)}
                                     >
+                                        <Receipt className="w-4 h-4 mr-1" />
                                         Receipt
                                     </Button>
                                 )}
@@ -693,6 +747,64 @@ export default function Index({ orders }: Props) {
                         </div>
                     ))}
                 </div>
+
+                {/* Pagination Controls */}
+                {pagination && pagination.last_page > 1 && (
+                    <div className="flex items-center justify-between px-4 py-3 glass-card">
+                        <div className="text-sm text-gray-600">
+                            Showing {((pagination.current_page - 1) * pagination.per_page) + 1} to {Math.min(pagination.current_page * pagination.per_page, pagination.total)} of {pagination.total} orders
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                disabled={currentPage === 1}
+                                className="h-9"
+                            >
+                                <ChevronRight className="w-4 h-4 rotate-180 mr-1" />
+                                Previous
+                            </Button>
+                            <div className="flex items-center gap-1">
+                                {Array.from({ length: Math.min(5, pagination.last_page) }, (_, i) => {
+                                    let pageNum;
+                                    if (pagination.last_page <= 5) {
+                                        pageNum = i + 1;
+                                    } else if (currentPage <= 3) {
+                                        pageNum = i + 1;
+                                    } else if (currentPage >= pagination.last_page - 2) {
+                                        pageNum = pagination.last_page - 4 + i;
+                                    } else {
+                                        pageNum = currentPage - 2 + i;
+                                    }
+                                    return (
+                                        <button
+                                            key={pageNum}
+                                            onClick={() => handlePageChange(pageNum)}
+                                            className={`w-9 h-9 rounded-lg text-sm font-medium transition-colors ${
+                                                currentPage === pageNum
+                                                    ? 'bg-accent-600 text-white'
+                                                    : 'hover:bg-gray-100 text-gray-600'
+                                            }`}
+                                        >
+                                            {pageNum}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                disabled={currentPage === pagination.last_page}
+                                className="h-9"
+                            >
+                                Next
+                                <ChevronRight className="w-4 h-4 ml-1" />
+                            </Button>
+                        </div>
+                    </div>
+                )}
 
                 {/* Empty State */}
                 {filteredOrders.length === 0 && (
