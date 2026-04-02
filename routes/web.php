@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/{order}/preview-estimate', [OrderController::class, 'previewEstimate'])->name('orders.preview-estimate');
     Route::get('/orders/{order}/preview-proforma', [OrderController::class, 'previewProforma'])->name('orders.preview-proforma');
     Route::get('/orders/{order}/preview-invoice', [OrderController::class, 'previewInvoice'])->name('orders.preview-invoice');
+    Route::get('/orders/{order}/preview-receipt', [OrderController::class, 'previewReceipt'])->name('orders.preview-receipt');
     // Download PDF routes
     Route::get('/orders/{order}/download-invoice', [OrderController::class, 'downloadInvoice'])->name('orders.download-invoice');
     Route::get('/orders/{order}/download-proforma', [OrderController::class, 'downloadProforma'])->name('orders.download-proforma');

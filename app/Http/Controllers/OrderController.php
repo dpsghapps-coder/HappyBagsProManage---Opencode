@@ -706,7 +706,7 @@ class OrderController extends Controller
 
     public function downloadReceipt(Request $request, Order $order)
     {
-        $order->load('client');
+        $order->load('client', 'user');
         $amountPaid = $request->input('amount_paid', $order->total);
         
         $pdf = \PDF::loadView('pdf.receipt', [
@@ -715,5 +715,16 @@ class OrderController extends Controller
         ]);
         
         return $pdf->download("Receipt_{$order->order_id}.pdf");
+    }
+
+    public function previewReceipt(Request $request, Order $order)
+    {
+        $order->load('client', 'user');
+        $amountPaid = $request->input('amount_paid', $order->total);
+        
+        return view('pdf.receipt', [
+            'order' => $order,
+            'amountPaid' => $amountPaid,
+        ]);
     }
 }

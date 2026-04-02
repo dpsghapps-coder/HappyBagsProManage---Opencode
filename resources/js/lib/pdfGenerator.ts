@@ -60,112 +60,15 @@ export function generateEstimate(order: Order): void {
 }
 
 export function generateReceipt(order: Order, amountPaid: number): void {
-    const receiptWindow = window.open('', '_blank');
-    if (!receiptWindow) return;
-    
-    receiptWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Receipt - Happy Bags</title>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    padding: 40px;
-                    max-width: 600px;
-                    margin: 0 auto;
-                }
-                .header {
-                    text-align: center;
-                    margin-bottom: 40px;
-                }
-                .brand {
-                    font-size: 28px;
-                    font-weight: bold;
-                    color: #1e3a5f;
-                }
-                .title {
-                    font-size: 24px;
-                    color: #16a34a;
-                    margin: 20px 0;
-                }
-                .info {
-                    margin: 20px 0;
-                }
-                .info-row {
-                    display: flex;
-                    justify-content: space-between;
-                    padding: 8px 0;
-                    border-bottom: 1px solid #eee;
-                }
-                .amount {
-                    font-size: 32px;
-                    color: #16a34a;
-                    text-align: center;
-                    margin: 40px 0;
-                    font-weight: bold;
-                }
-                .status {
-                    text-align: center;
-                    color: #16a34a;
-                    font-size: 18px;
-                }
-                .footer {
-                    text-align: center;
-                    margin-top: 60px;
-                    color: #999;
-                    font-size: 12px;
-                }
-                @media print {
-                    body { padding: 20px; }
-                }
-            </style>
-        </head>
-        <body>
-            <div class="header">
-                <div class="brand">HAPPY BAGS</div>
-                <div class="title">RECEIPT</div>
-            </div>
-            
-            <div class="info">
-                <div class="info-row">
-                    <span>Receipt No:</span>
-                    <span>RCP-${order.order_id}</span>
-                </div>
-                <div class="info-row">
-                    <span>Date:</span>
-                    <span>${new Date().toLocaleDateString()}</span>
-                </div>
-                <div class="info-row">
-                    <span>Order Ref:</span>
-                    <span>${order.order_id}</span>
-                </div>
-                <div class="info-row">
-                    <span>Client:</span>
-                    <span>${order.client?.client_name || 'N/A'}</span>
-                </div>
-            </div>
-            
-            <div class="amount">GHC ${amountPaid.toFixed(2)}</div>
-            <div class="status">Payment Status: PAID</div>
-            
-            <div class="footer">
-                Thank you for your payment!<br>
-                Happy Bags - Paper Bag Manufacturers
-            </div>
-            
-            <script>
-                window.onload = function() {
-                    window.print();
-                    window.onafterprint = function() {
-                        window.close();
-                    };
-                };
-            </script>
-        </body>
-        </html>
-    `);
-    receiptWindow.document.close();
+    const url = route('orders.preview-receipt', order.id);
+    const fullUrl = `${url}?amount_paid=${encodeURIComponent(amountPaid.toString())}`;
+    const previewWindow = window.open(fullUrl, '_blank');
+    if (previewWindow) {
+        previewWindow.onload = () => {
+            previewWindow.print();
+            previewWindow.onafterprint = () => previewWindow.close();
+        };
+    }
 }
 
 /*

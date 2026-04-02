@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Happy Bags - Official Receipt</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <style>
+        @page {
+            size: A5 landscape;
+            margin: 0;
+        }
+
+        body {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "inverse-on-surface": "#f1f0f3",
+                        "on-tertiary": "#e2e2e2",
+                        "inverse-primary": "#c6c6c9",
+                        "tertiary-fixed-dim": "#474747",
+                        "on-tertiary-fixed": "#ffffff",
+                        "tertiary": "#3b3b3b",
+                        "surface-variant": "#e3e2e5",
+                        "surface-tint": "#5d5e61",
+                        "secondary-fixed-dim": "#a7abb4",
+                        "on-primary-container": "#ffffff",
+                        "primary-container": "#3a3c3e",
+                        "on-background": "#1a1c1e",
+                        "secondary-fixed": "#c2c7cf",
+                        "on-surface": "#1a1c1e",
+                        "on-secondary-fixed": "#171c22",
+                        "primary-fixed": "#5d5e61",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#410002",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#dadadc",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f4f3f6",
+                        "on-tertiary-fixed-variant": "#e2e2e2",
+                        "tertiary-fixed": "#5e5e5e",
+                        "primary-fixed-dim": "#454749",
+                        "tertiary-container": "#747474",
+                        "primary": "#000000",
+                        "on-primary-fixed": "#ffffff",
+                        "secondary-container": "#d0d5dd",
+                        "on-tertiary-container": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#171c22",
+                        "on-primary-fixed-variant": "#e2e2e5",
+                        "inverse-surface": "#2f3033",
+                        "surface-bright": "#faf9fc",
+                        "secondary": "#5a5f66",
+                        "surface-container-high": "#e8e8eb",
+                        "background": "#faf9fc",
+                        "outline": "#777777",
+                        "on-secondary-fixed-variant": "#373c43",
+                        "on-surface-variant": "#474747",
+                        "on-primary": "#e2e2e5",
+                        "surface-container-highest": "#e3e2e5",
+                        "surface-container": "#eeedf0",
+                        "surface": "#faf9fc",
+                        "outline-variant": "#c6c6c6"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body
+    class="bg-background font-body text-on-surface antialiased overflow-hidden flex items-center justify-center min-h-screen">
+    <!-- A5 Landscape Container (Approx 1.41:1 Ratio) -->
+    <main
+        class="w-[842px] h-[595px] bg-surface-container-lowest relative overflow-hidden shadow-2xl print:shadow-none flex flex-col px-12 py-10">
+        <!-- Background Tonal Accents -->
+        <div
+            class="absolute top-0 right-0 w-2/5 h-full bg-surface-container-low -z-10 skew-x-[-12deg] translate-x-24 opacity-40">
+        </div>
+        <!-- Header Section -->
+        <header class="flex justify-between items-start mb-8">
+            <div class="flex flex-col gap-2">
+                <div class="flex items-center gap-3">
+                    <img alt="Happy Bags logo" class="h-10 w-auto"
+                        data-alt="minimalist professional logo for a bag company with clean geometric lines in black and white"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoTh3wORglzeb7K2N-X_A7KlDk0JrFvkjJGc7X5dmY9zGOGEDBx1gMKds3_NZoEfXbOQzYz0NckedMGpLwzQMrvUfPIGh_3n90ct3E_edm1lOxho9AgZACJukEwF-_HRyMPIeWqnzbGh0QpB0VywyaibvGIQx-eAXae_Ae-OCr2KTV3ag4EddzAu39eE4enpAcXrqvKtxqsyYrjZ9pXIJuQnf_bDhfqZd_cPml5HA4iuBStQTUl9oAbOOx3dXNI3Xb0Gwn4DqcPJm6" />
+                    <span class="font-headline font-extrabold text-2xl tracking-tighter text-primary">HAPPY BAGS</span>
+                </div>
+                <p class="text-secondary text-[10px] uppercase tracking-[0.2em] font-label px-1">Quality Luxury
+                    Essentials</p>
+            </div>
+            <div class="text-right">
+                <h1 class="font-headline font-extrabold text-5xl text-primary tracking-tighter leading-none mb-2">
+                    OFFICIAL RECEIPT</h1>
+                <div class="flex flex-col gap-1 items-end">
+                    <div class="flex items-center gap-4">
+                        <span class="font-label text-[11px] text-secondary tracking-widest uppercase">Receipt No.</span>
+                        <span class="font-headline font-bold text-lg text-primary">HB-2024-8891</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="font-label text-[11px] text-secondary tracking-widest uppercase">Date</span>
+                        <span class="font-body font-semibold text-on-surface">OCTOBER 24, 2023</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content Area -->
+        <div class="flex-grow flex flex-col gap-6">
+            <!-- Recipient & Amount Section -->
+            <div class="grid grid-cols-12 gap-8">
+                <!-- Data Fields -->
+                <div class="col-span-8 flex flex-col gap-5">
+                    <!-- Received From -->
+                    <div class="bg-surface-container rounded-lg p-4 flex flex-col gap-1">
+                        <label class="font-label text-[10px] text-secondary uppercase tracking-widest">Received
+                            From</label>
+                        <span class="font-headline font-bold text-xl text-primary">Kwame Mensah &amp; Sons Ltd.</span>
+                    </div>
+                    <!-- The Sum of -->
+                    <div class="bg-surface-container-low rounded-lg p-4 flex flex-col gap-1">
+                        <label class="font-label text-[10px] text-secondary uppercase tracking-widest">The Sum of (In
+                            Words)</label>
+                        <span class="font-body font-medium italic text-on-surface">Twelve Thousand, Four Hundred and
+                            Fifty Ghana Cedis Only.</span>
+                    </div>
+                    <!-- Payment For -->
+                    <div class="bg-surface-container rounded-lg p-4 flex flex-col gap-1">
+                        <label class="font-label text-[10px] text-secondary uppercase tracking-widest">Payment
+                            For</label>
+                        <span class="font-body text-on-surface">Bulk Order - Premium Leather Tote Bags (Batch
+                            #402)</span>
+                    </div>
+                </div>
+                <!-- Financial Highlight Box -->
+                <div class="col-span-4 flex flex-col gap-4">
+                    <div class="bg-primary text-on-primary rounded-xl overflow-hidden shadow-lg h-full flex flex-col">
+                        <!-- Amount Section -->
+                        <div class="flex-1 p-6 flex flex-col justify-center items-center text-center">
+                            <label
+                                class="font-label text-[11px] text-on-primary/70 uppercase tracking-[0.2em] mb-2">Amount
+                                Paid (GHC)</label>
+                            <div class="flex items-baseline gap-1">
+                                <span class="font-headline font-bold text-4xl">12,450.00</span>
+                            </div>
+                        </div>
+                        <!-- Balance Section -->
+                    </div>
+                </div>
+            </div>
+            <!-- Bottom Section: Signature & Branding Detail -->
+            <div class="mt-auto flex justify-between items-end">
+                <div class="flex flex-col gap-1 max-w-xs">
+                    <p class="text-[9px] text-secondary leading-relaxed font-body uppercase tracking-tight">
+                        Thank you for your business. This receipt is computer generated and does not require a physical
+                        stamp. All goods sold are subject to standard terms and conditions.
+                    </p>
+                </div>
+                <!-- Signature Block -->
+                <div class="text-center min-w-[240px]">
+                    <div class="mb-2 relative">
+                        <!-- Signature Image Placeholder -->
+                        <div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-80 pointer-events-none">
+                            <span class="font-headline italic text-2xl text-secondary/30 select-none">H.B.
+                                Finance</span>
+                        </div>
+                        <div class="w-full h-px bg-outline-variant/50"></div>
+                    </div>
+                    <p class="font-headline font-extrabold text-[11px] text-primary tracking-[0.15em] uppercase">
+                        Authorized Signature</p>
+                    <p class="font-label text-[9px] text-secondary uppercase tracking-widest mt-0.5">Finance Department
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- Decorative Precision Footer -->
+        <footer class="mt-8 flex justify-between items-center px-4 py-3 border-t border-outline-variant/15">
+            <span class="font-label text-[9px] text-secondary uppercase tracking-widest">© Happy Bags. All rights
+                reserved.</span>
+            <div class="flex gap-6">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[14px] text-secondary">location_on</span>
+                    <span class="font-label text-[9px] text-secondary uppercase tracking-widest">Accra, Ghana</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[14px] text-secondary">mail</span>
+                    <span
+                        class="font-label text-[9px] text-secondary uppercase tracking-widest">accounts@happybags.com</span>
+                </div>
+            </div>
+        </footer>
+        <!-- Hidden Navigation Shell suppression for task-focused page as per mandate -->
+    </main>
+</body>
+
+</html>

@@ -20,8 +20,8 @@
         
         body {
             font-family: Arial, Helvetica, sans-serif;
-            font-size: 14px;
-            line-height: 1.5;
+            font-size: 13px;
+            line-height: 1.4;
             color: var(--text-primary);
             background: #f8f9fa;
             -webkit-print-color-adjust: exact;
@@ -36,7 +36,7 @@
         .page {
             width: 210mm;
             min-height: 297mm;
-            padding: 12mm 15mm 25mm 15mm;
+            padding: 8mm 12mm 18mm 12mm;
             margin: 0 auto;
             background: #ffffff;
             position: relative;
@@ -46,8 +46,8 @@
         .header {
             display: flex;
             flex-direction: row;
-            gap: 40px;
-            margin-bottom: 30px;
+            gap: 25px;
+            margin-bottom: 15px;
         }
         
         .header-main {
@@ -62,13 +62,13 @@
             font-style: italic;
             color: #000000;
             line-height: 1;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
         
         .brand-info {
             font-size: 13px;
             color: var(--text-secondary);
-            line-height: 1.6;
+            line-height: 1.4;
         }
         
         .brand-info strong {
@@ -78,8 +78,8 @@
         
         /* Client Section */
         .client-section {
-            margin-top: 30px;
-            padding-top: 25px;
+            margin-top: 15px;
+            padding-top: 15px;
             border-top: 1px solid var(--border-light);
         }
         
@@ -109,18 +109,18 @@
         .dark-panel {
             background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
             width: 240px;
-            padding: 28px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             color: #ffffff;
-            min-height: 220px;
+            min-height: 180px;
             position: relative;
             border-left: 4px solid var(--accent-light);
         }
         
         .brand-image {
-            height: 45px;
-            margin-bottom: 12px;
+            height: 35px;
+            margin-bottom: 8px;
         }
         
         .doc-label {
@@ -129,40 +129,40 @@
             text-transform: uppercase;
             letter-spacing: 0.2em;
             color: rgba(255, 255, 255, 0.4);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
         
         .doc-type {
             font-family: Arial Black, sans-serif;
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 900;
             line-height: 1;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
         
         .doc-number {
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
         
         .doc-number-value {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             color: #ffffff;
         }
         
         .doc-date {
-            margin-top: 15px;
+            margin-top: 10px;
         }
         
         .doc-date-value {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             color: #ffffff;
         }
         
         .panel-total {
             margin-top: auto;
-            padding-top: 20px;
+            padding-top: 12px;
             border-top: 1px solid rgba(255, 255, 255, 0.15);
         }
         
@@ -172,12 +172,12 @@
             text-transform: uppercase;
             letter-spacing: 0.15em;
             color: rgba(255, 255, 255, 0.4);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         
         .panel-total-value {
             font-family: Arial Black, sans-serif;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 900;
         }
         
@@ -185,7 +185,7 @@
         .items-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
             table-layout: auto;
         }
         
@@ -194,7 +194,7 @@
         }
         
         .items-table th {
-            padding: 12px 15px;
+            padding: 8px 12px;
             text-align: left;
             font-size: 10px;
             font-weight: 700;
@@ -231,7 +231,7 @@
         }
         
         .items-table td {
-            padding: 16px 15px;
+            padding: 10px 12px;
             vertical-align: middle;
         }
         
@@ -276,9 +276,9 @@
         .footer {
             display: flex;
             flex-direction: row;
-            gap: 40px;
-            padding-top: 25px;
-            margin-top: 50px;
+            gap: 25px;
+            padding-top: 15px;
+            margin-top: 30px;
             border-top: 1px solid var(--border-light);
         }
         
@@ -292,13 +292,13 @@
             text-transform: uppercase;
             letter-spacing: 0.12em;
             color: var(--accent);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         
         .notes-content {
             font-size: 11px;
             color: var(--text-secondary);
-            line-height: 1.6;
+            line-height: 1.4;
             max-width: 300px;
         }
         
@@ -313,7 +313,7 @@
         .totals-row {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
+            padding: 6px 0;
             font-size: 13px;
         }
         
@@ -332,9 +332,9 @@
             align-items: center;
             background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
             color: #ffffff;
-            padding: 14px 18px;
-            border-radius: 8px;
-            margin-top: 12px;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-top: 10px;
         }
         
         .grand-total-label {
@@ -346,7 +346,7 @@
         
         .grand-total-value {
             font-family: Arial Black, sans-serif;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 900;
         }
         
@@ -354,39 +354,39 @@
         .signature-section {
             display: flex;
             justify-content: flex-end;
-            margin-top: 40px;
-            padding-top: 20px;
+            margin-top: 25px;
+            padding-top: 12px;
         }
         
         .signature-block {
             text-align: center;
-            min-width: 180px;
+            min-width: 160px;
         }
         
         .signature-line {
-            width: 150px;
+            width: 120px;
             border-bottom: 1px solid var(--text-primary);
-            margin: 0 auto 8px auto;
-            height: 40px;
+            margin: 0 auto 6px auto;
+            height: 30px;
         }
         
         .signature-label {
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             color: var(--accent);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         
         .signature-name {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             color: var(--text-primary);
         }
         
         .signature-role {
-            font-size: 10px;
+            font-size: 9px;
             color: var(--text-secondary);
             text-transform: capitalize;
         }
@@ -394,10 +394,10 @@
         /* Page Footer with Company Info */
         .page-footer {
             position: absolute;
-            bottom: 12mm;
-            left: 15mm;
-            right: 15mm;
-            padding-top: 15px;
+            bottom: 8mm;
+            left: 12mm;
+            right: 12mm;
+            padding-top: 10px;
             border-top: 1px solid var(--border-light);
         }
         
@@ -405,12 +405,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         
         .footer-info {
             display: flex;
-            gap: 30px;
+            gap: 20px;
             font-size: 9px;
             color: var(--text-secondary);
         }
@@ -418,7 +418,7 @@
         .footer-info span {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
         
         .footer-info strong {

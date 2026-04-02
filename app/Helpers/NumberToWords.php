@@ -1,10 +1,5 @@
 <?php
 
-namespace App\Providers;
-
-use Illuminate\Support\Facades\Vite;
-use Illuminate\Support\ServiceProvider;
-
 if (!function_exists('numberToWords')) {
     function numberToWords(float $amount): string
     {
@@ -13,21 +8,21 @@ if (!function_exists('numberToWords')) {
         $cedis = intval($amount);
         $pesewas = round(($amount - $cedis) * 100);
         
-        $cedisWords = convertNumberToWords($cedis);
-        $pesewasWords = convertNumberToWords($pesewas);
+        $cedisWords = convertNumber($cedis);
+        $pesewasWords = convertNumber($pesewas);
         
         $result = $cedisWords . ' Cedis';
         
         if ($pesewas > 0) {
-            $result .= ', ' . $pesewasWords . ' pesewas';
+            $result .= ', ' . $pesewasWords . ' Pesewas';
         }
         
         return $result;
     }
 }
 
-if (!function_exists('convertNumberToWords')) {
-    function convertNumberToWords(int $num): string
+if (!function_exists('convertNumber')) {
+    function convertNumber(int $num): string
     {
         if ($num == 0) {
             return 'Zero';
@@ -56,42 +51,23 @@ if (!function_exists('convertNumberToWords')) {
         if ($num < 1000) {
             $hundred = intval($num / 100);
             $remainder = $num % 100;
-            return $ones[$hundred] . ' Hundred' . ($remainder > 0 ? ' ' . convertNumberToWords($remainder) : '');
+            return $ones[$hundred] . ' Hundred' . ($remainder > 0 ? ' ' . convertNumber($remainder) : '');
         }
         
         if ($num < 1000000) {
             $thousands = intval($num / 1000);
             $remainder = $num % 1000;
-            return convertNumberToWords($thousands) . ' Thousand' . ($remainder > 0 ? ' ' . convertNumberToWords($remainder) : '');
+            return convertNumber($thousands) . ' Thousand' . ($remainder > 0 ? ' ' . convertNumber($remainder) : '');
         }
         
         if ($num < 1000000000) {
             $millions = intval($num / 1000000);
             $remainder = $num % 1000000;
-            return convertNumberToWords($millions) . ' Million' . ($remainder > 0 ? ' ' . convertNumberToWords($remainder) : '');
+            return convertNumber($millions) . ' Million' . ($remainder > 0 ? ' ' . convertNumber($remainder) : '');
         }
         
         $billions = intval($num / 1000000000);
         $remainder = $num % 1000000000;
-        return convertNumberToWords($billions) . ' Billion' . ($remainder > 0 ? ' ' . convertNumberToWords($remainder) : '');
-    }
-}
-
-class AppServiceProvider extends ServiceProvider
-{
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        //
-    }
-
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
-        Vite::prefetch(concurrency: 3);
+        return convertNumber($billions) . ' Billion' . ($remainder > 0 ? ' ' . convertNumber($remainder) : '');
     }
 }
